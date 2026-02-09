@@ -4,6 +4,7 @@
   "version": "5.1.5",
   "scripts": {
     "dev": "vite",
+    "restart": "npm i & npm run build & pm2 startOrReload ecosystem.config.cjs",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview --port 5050",
     "test:unit": "vitest --environment jsdom",
@@ -31,7 +32,7 @@
     "connect-history-api-fallback": "^2.0.0",
     "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "flag-icon-css": "^4.1.7",
     "highlight.js": "^11.10.0",
     "json-server": "^0.17.3",
