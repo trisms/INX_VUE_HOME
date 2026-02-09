@@ -245,7 +245,8 @@ function toImg(f: PortfolioFile): string {
   // fileNo가 없으면 빈칸 -> placeholder
   const id = f.fileNo;
   if (!id) return "";
-  return `${API_BASE}/image/${id}`;
+  //return `${API_BASE}/image/${id}`;
+  return `http://210.126.2.153:8080/api/image/${id}`;
 }
 function toVariant(f: PortfolioFile): Variant {
   // 파일명 기반으로 wide/tall 정하고 싶으면 여기서 규칙 추가 가능

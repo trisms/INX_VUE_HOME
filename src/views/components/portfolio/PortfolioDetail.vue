@@ -99,7 +99,7 @@ async function loadDetail() {
   detail.value = null;
 
   try {
-    const { data } = await http.get<ApiDetailResponse>("/portfolio/detail", {
+    const { data } = await http.get<ApiDetailResponse>("http://210.126.2.153:8080/api/portfolio/detail", {
       params: { fileNo: fileNo.value },
     });
 
@@ -177,7 +177,8 @@ const ProjectImages = defineComponent({
   },
   setup(props) {
     const imgFailed = ref(false);
-    const heroImg = computed(() => `${API_BASE}/image/${props.fileNo}`);
+    //const heroImg = computed(() => `${API_BASE}/image/${props.fileNo}`);
+    const heroImg = computed(() => `http://210.126.2.153:8080/api/image/${props.fileNo}`);
 
     function onImgError() {
       imgFailed.value = true;
