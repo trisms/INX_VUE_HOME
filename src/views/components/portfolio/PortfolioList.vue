@@ -162,6 +162,7 @@ async function loadProjects() {
     const { data } = await http.get<ApiListResponse>("http://210.126.2.153:8080/api/portfolio/list");
     const rows = Array.isArray(data?.list) ? data.list : [];
 
+
     // 필요하면 enabled/dataStatus 필터를 여기서 추가
     const filtered = rows.filter((r) => String(r.dataStatus) === "1");
     projects.value = filtered.map(toProject);
