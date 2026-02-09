@@ -29,7 +29,8 @@ const isTablet = computed(() => props.size === "Tablet");
 const API_BASE = import.meta.env.VITE_API_BASE_URL as string; // "http://localhost:8080/api"
 
 // ✅ id 매칭된 이미지 URL
-const imgSrc = computed(() => `${API_BASE}/image/${props.project.id}`);
+//const imgSrc = computed(() => `${API_BASE}/image/${props.project.id}`);
+const imgSrc = computed(() => `http://210.126.2.153:8080/api/image/${props.project.id}`);
 
 // ✅ 이미지 실패 시 fallback
 const imgFailed = ref(false);
