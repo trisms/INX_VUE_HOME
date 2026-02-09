@@ -159,7 +159,7 @@ async function loadProjects() {
 
   try {
     // GET /portfolio/list (백엔드가 이 구조로 내려준다고 했음)
-    const { data } = await http.get<ApiListResponse>("/portfolio/list");
+    const { data } = await http.get<ApiListResponse>("http://210.126.2.153:8080/api/portfolio/list");
     const rows = Array.isArray(data?.list) ? data.list : [];
 
     // 필요하면 enabled/dataStatus 필터를 여기서 추가

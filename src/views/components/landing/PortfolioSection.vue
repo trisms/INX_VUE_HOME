@@ -268,7 +268,7 @@ async function loadProjects() {
   loading.value = true;
   error.value = null;
   try {
-    const { data } = await http.get<ApiListResponse>("/portfolio/list");
+    const { data } = await http.get<ApiListResponse>("http://210.126.2.153:8080/api/portfolio/list");
     const rows = Array.isArray(data?.list) ? data.list : [];
 
     // 필요하면 enabled/dataStatus 필터 여기서
