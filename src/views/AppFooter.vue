@@ -1,0 +1,31 @@
+<template>
+  <div id="footer" class="footer">
+    <div class="container">
+      <div class="footer-brand">
+        <div class="footer-brand-logo"></div>
+        Color Admin
+      </div>
+      <p>
+        © Copyright Color Admin 2025 <br>
+        An admin &amp; front end theme with serious impact. Created by <a href="#">SeanTheme</a>
+      </p>
+      <p class="social-list">
+        <a href="#"><i class="fab fa-facebook-f fa-fw"></i></a>
+        <a href="#"><i class="fab fa-instagram fa-fw"></i></a>
+        <a href="#"><i class="fab fa-twitter fa-fw"></i></a>
+        <a href="#"><i class="fab fa-google-plus-g fa-fw"></i></a>
+        <a href="#"><i class="fab fa-dribbble fa-fw"></i></a>
+      </p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "AppFooter"
+}
+</script>
+
+<style scoped>
+
+</style>

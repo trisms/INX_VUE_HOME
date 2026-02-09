@@ -1,0 +1,2199 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>INX Landing</title>
+
+    <!-- Tailwind (미리보기용). 실서비스면 빌드 방식 권장 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* =========================
+          0) Global (공통)
+        ========================= */
+        :root{
+            --ink:#111217;
+            --muted:#353841;
+
+            --bg1:#ccafff;
+            --bg2:#b494f7;
+
+            --lime:#c9ff7e;
+            --violet:#9763f0;
+
+            --max:1144px;
+            --pill:100px;
+        }
+        *{ box-sizing:border-box; }
+        body{
+            margin:0;
+            font-family:Pretendard, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+            color:var(--ink);
+            background:#fff;
+        }
+        a{ color:inherit; text-decoration:none; }
+        button{ border:0; background:transparent; font:inherit; cursor:pointer; }
+        img{ display:block; max-width:100%; }
+
+        /* =========================
+          1) Banner
+        ========================= */
+        .banner{
+            width:100%;
+            min-height:100vh;
+            background:linear-gradient(to bottom, var(--bg1), var(--bg2));
+        }
+
+        .display{
+            width:100%;
+            position:relative;
+            padding:80px 68px;
+            min-height:668px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .display-inner{
+            width:100%;
+            max-width:var(--max);
+            position:relative;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:34px;
+        }
+        .headline-wrap{
+            width:100%;
+            max-width:var(--max);
+            display:flex;
+            flex-direction:column;
+            gap:34px;
+        }
+        .headline{
+            margin:0;
+            font-size:40px;
+            line-height:1.4;
+            letter-spacing:-1.2px;
+            color:var(--ink);
+        }
+        .bubbles{
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            align-items:flex-start;
+            padding-right:8px;
+        }
+        .bubble{
+            background:#fff;
+            border-radius:var(--pill);
+            padding:4px 24px;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .bubble p{
+            margin:0;
+            font-size:20px;
+            line-height:1.4;
+            letter-spacing:-0.6px;
+            /*color:var(--muted);*/
+            font-weight:500;
+            white-space:nowrap;
+        }
+        .bubble .purple{ color:var(--violet); font-weight:700; }
+
+        .graphic-holder{
+            position:absolute;
+            left:calc(50% + 483.5px);
+            top:214px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64,1);
+            width:369px;
+            height:458px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .cta{
+            width:100%;
+            background:var(--ink);
+            padding:36px 68px;
+            display:flex;
+            justify-content:center;
+        }
+        .cta-inner{
+            width:100%;
+            max-width:var(--max);
+            display:flex;
+            gap:20px;
+            align-items:center;
+        }
+        .cta-text{
+            width:355px;
+            display:flex;
+            flex-direction:column;
+            gap:20px;
+            color:#fff;
+        }
+        .cta-title{
+            margin:0;
+            font-size:32px;
+            line-height:1.4;
+            letter-spacing:-0.96px;
+        }
+        .cta-title .lime{ color:var(--lime); }
+
+        .btn-row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+        .btn-inquiry{
+            height:32px;
+            padding:4px 10px;
+            border-radius:6px;
+            background:#363941;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .btn-inquiry span{
+            font-weight:800;
+            font-size:16px;
+            line-height:1.4;
+            letter-spacing:-0.32px;
+            color:var(--lime);
+        }
+
+        .btn-brochure{
+            border-radius:6px;
+            background:var(--lime);
+            box-shadow:0 4px 4px -3px rgba(0,0,0,0.25);
+            position:relative;
+            display:inline-flex;
+            align-items:center;
+            overflow:hidden;
+        }
+        .btn-brochure .inner{
+            display:flex;
+            gap:4px;
+            align-items:center;
+            padding:4px 6px 4px 10px;
+        }
+        .btn-brochure strong{
+            font-size:16px;
+            line-height:1.4;
+            letter-spacing:-0.32px;
+            color:var(--ink);
+            font-weight:800;
+        }
+        .btn-brochure .icon{
+            width:24px; height:24px;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .btn-brochure .icon svg{ width:18px; height:17px; }
+        .btn-brochure .gloss{
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            border-radius:inherit;
+            box-shadow:inset 1px 1px 1px rgba(255,255,255,0.5);
+        }
+
+        .reviews{
+            flex:1;
+            height:180px;
+            position:relative;
+            overflow:hidden;
+            padding:10px 0;
+            display:flex;
+            align-items:center;
+        }
+        .reviews .lane{
+            flex:1;
+            height:100%;
+            border-radius:12px;
+            border:1px solid rgba(255,255,255,0.15);
+            background:rgba(255,255,255,0.06);
+        }
+        .fade-left, .fade-right{
+            position:absolute;
+            top:50%;
+            transform:translateY(-50%);
+            width:56px;
+            height:180px;
+            pointer-events:none;
+        }
+        .fade-left{
+            left:0;
+            background:linear-gradient(to left, rgba(17,18,23,0), #111217 95%);
+            transform:translateY(-50%) rotate(180deg) scaleY(-1);
+        }
+        .fade-right{
+            right:0;
+            background:linear-gradient(to left, rgba(17,18,23,0), #111217 95%);
+            transform:translateY(-50%) rotate(180deg) scaleY(-1);
+        }
+
+        @media (max-width: 1279px){
+            .display{ padding:64px 24px; }
+            .graphic-holder{ display:none; }
+            .cta{ padding:28px 24px; }
+            .cta-inner{ flex-direction:column; align-items:flex-start; }
+            .cta-text{ width:100%; }
+            .reviews{ width:100%; }
+        }
+        @media (max-width: 799px){
+            .headline{ font-size:32px; letter-spacing:-0.96px; }
+            .bubble p{ font-size:18px; }
+        }
+
+
+        :root{
+            --bg:#111217;
+            --accent:#9763f0;
+            --lime:#c9ff7e;
+            --muted:#f0f3f6;
+            --dot:#9196a0;
+            --w:1280px;
+            --h:728px;
+            --dash: rgba(17,18,23,0.85);
+            --radius:2px;
+            --font: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+        }
+        *{ box-sizing:border-box; }
+        body{ margin:0; background:#000; font-family:var(--font); }
+
+      /*  .footer{
+            position:relative;
+            width:100%;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#000;
+        }*/
+
+        /* Section: fixed artboard size like figma */
+        .section{
+            position:relative;
+            width:var(--w);
+            height:var(--h);
+            overflow:hidden;
+            background:var(--bg);
+        }
+
+        /* Background overlay like React: bg + img3 with blend-color-burn */
+        .section__bg{
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            z-index:0;
+        }
+        .section__bg .base{
+            position:absolute;
+            inset:0;
+            background:var(--bg);
+        }
+        .section__bg img{
+            position:absolute;
+            inset:0;
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            mix-blend-mode:color-burn;
+            opacity:1;
+        }
+
+        /* Right panel: Infos (526px wide) */
+        .infos{
+            position:absolute;
+            top:0;
+            right:0;
+            width:526px;
+            height:728px;
+            z-index:2;
+            border-right:1px dashed var(--dash);
+        }
+
+        .infos__contact{
+            position:absolute;
+            left:0;
+            top:0;
+            width:526px;
+            height:436px;
+            background:var(--accent);
+            overflow:hidden;
+        }
+
+        /* info-info block */
+        .info-info{
+            position:absolute;
+            left:44px;
+            right:44px;
+            top:92px;
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+            z-index:3;
+        }
+
+        .telfax{ display:flex; gap:16px; }
+        .tel, .fax{
+            flex:1 0 0;
+            padding-top:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .email{
+            width:438px;
+            height:66px;
+            padding-top:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+        .instagram{
+            width:100%;
+            padding-top:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .textbox{
+            height:36px;
+            width:100%;
+            border-radius:var(--radius);
+            display:flex;
+            align-items:center;
+        }
+        .textbox .pad{
+            padding:0 8px;
+            width:100%;
+            display:flex;
+            align-items:center;
+        }
+        .textbox p{
+            margin:0;
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:-0.54px;
+            color:#fff;
+            line-height:1.4;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+
+        .row-link{
+            display:flex;
+            gap:6px;
+            align-items:flex-start;
+            width:100%;
+        }
+        .openpage{
+            width:36px;
+            height:36px;
+            border-radius:var(--radius);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:0 8px;
+            flex:0 0 auto;
+        }
+        .openlink{
+            width:24px;
+            height:24px;
+            border-radius:999px;
+            border:1px solid #fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .openlink svg{ width:11px; height:11px; display:block; }
+
+        /* Paper background inside purple */
+        .paper{
+            position:absolute;
+            inset:-8px -8px 8px 8px; /* top right bottom left */
+            overflow:hidden;
+            z-index:1;
+        }
+        .paper .subtract{
+            position:absolute;
+            left:0;
+            top:0;
+            width:526px;
+            height:436px;
+        }
+        .paper .subtract img{
+            position:absolute;
+            inset:0;
+            width:534px;
+            height:444px;
+            transform:translate(-0.76%, -0.0%);
+            object-fit:cover;
+        }
+
+        /* Captions (Tel/Fax/Email/Instagram labels) */
+        .caption{
+            position:absolute;
+            display:flex;
+            gap:2px;
+            align-items:center;
+            z-index:4;
+            color:var(--muted);
+            font-size:16px;
+            letter-spacing:-0.32px;
+        }
+        .caption .icon{
+            width:24px; height:24px;
+            position:relative;
+            overflow:hidden;
+            flex:0 0 auto;
+        }
+        .caption p{ margin:0; line-height:1.6; }
+
+        .caption.tel{ left:44px; top:92px; }
+        .caption.fax{ left:271px; top:92px; }
+        .caption.email{ left:44px; top:175px; }
+        .caption.ig{ left:44px; top:258px; }
+
+        /* Address block under purple contact */
+        .infos__address{
+            position:absolute;
+            left:0;
+            top:436px;
+            width:526px;
+            height:292px;
+            z-index:2;
+            background:transparent;
+            border-top:1px dashed var(--dash);
+        }
+        .add{
+            position:absolute;
+            left:47px;
+            right:44px;
+            top:48px;
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+        }
+        .add .caption-inline{
+            display:flex;
+            gap:2px;
+            align-items:center;
+            color:#fff;
+            font-size:16px;
+            letter-spacing:-0.32px;
+        }
+        .add .caption-inline .icon{ width:24px; height:24px; position:relative; overflow:hidden; }
+        .addr{
+            display:flex;
+            flex-direction:column;
+            gap:4px;
+            color:#fff;
+        }
+        .addr .kor{
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:-0.36px;
+            line-height:1.6;
+            margin:0;
+        }
+        .addr .eng{
+            display:flex;
+            flex-wrap:wrap;
+            gap:0 8px;
+            align-items:center;
+            margin:0;
+        }
+        .addr .eng span{
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:-0.54px;
+            line-height:1.4;
+            color:#fff;
+            white-space:nowrap;
+        }
+        .addr .eng i{
+            width:4px; height:4px;
+            background:var(--dot);
+            display:inline-block;
+            flex:0 0 auto;
+            margin:0 2px;
+            align-self:center;
+        }
+
+        /* Left brand area (754px wide) */
+        .brand{
+            position:absolute;
+            left:0;
+            top:0;
+            width:754px;
+            height:728px;
+            z-index:1;
+            border-left:1px dashed var(--dash);
+            border-right:1px dashed var(--dash);
+            overflow:hidden;
+        }
+
+        /* Masked mockup */
+        .mock{
+            position:absolute;
+            left:89px;
+            bottom:-0.33px;
+            width:586px;
+            height:618px;
+            /* mask settings (img1) */
+            -webkit-mask-image: url("../../src/assets/img/inx/INX-card.png");
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 585.861px 642.033px;
+            -webkit-mask-position: 0.512px -0.333px;
+
+            mask-image: url("../../src/assets/img/inx/INX-card.png");
+            mask-repeat: no-repeat;
+            mask-size: 585.861px 642.033px;
+            mask-position: 0.512px -0.333px;
+        }
+        .mock img{
+            position:absolute;
+            inset:0;
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            pointer-events:none;
+        }
+
+        /* Brand message block */
+        .brandmsg{
+            position:absolute;
+            left:19px;
+            top:92px;
+            width:182px;
+            height:93px;
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            z-index:3;
+        }
+        .msgline{
+            width:100%;
+            display:flex;
+            align-items:center;
+        }
+        .msgline .leftpad{
+            width:100%;
+            display:flex;
+            align-items:center;
+            padding-left:12px;
+            gap:0;
+        }
+
+        .badge{
+            width:12px;
+            height:23px;
+            border-radius:2px;
+            background:var(--lime);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#111217;
+            font-size:16px;
+            line-height:1.6;
+            box-shadow: inset 1px 1px 4px rgba(17,18,23,0.5);
+            flex:0 0 auto;
+        }
+        .badge.n{ box-shadow: inset 1px 4px 4px rgba(17,18,23,0.5); }
+        .badge.x{ box-shadow: inset 1px 1px 2px rgba(17,18,23,0.5); }
+
+        .word{
+            height:23px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:2px;
+            padding:0 2px;
+            color:#fff;
+            font-size:16px;
+            line-height:1.6;
+            letter-spacing:-0.32px;
+            white-space:nowrap;
+        }
+        .word.single{
+            width:12px;
+            padding:0;
+        }
+
+        /* simple links */
+        a{ color:inherit; text-decoration:none; }
+        a:hover .openlink{ filter:brightness(1.05); }
+
+
+
+        .svc-wrap{
+            background:#111217;
+            min-height:100vh;
+            padding:120px 48px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            gap:120px;
+        }
+        .svc-header{
+            width:395px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:8px;
+            line-height:1.4;
+        }
+        .svc-blocks{
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            gap:120px;
+            align-items:stretch;
+        }
+
+        /* 각 Row: 좌(문구 368) + 우(카드들) */
+        .svc-row{
+            width:100%;
+            display:flex;
+            gap:20px;
+            align-items:flex-start;
+            justify-content:center;
+        }
+        .svc-quote{
+            width:368px;
+            flex:0 0 368px;
+            display:flex;
+            flex-direction:column;
+            align-items:flex-start;
+        }
+        .svc-cards{
+            flex:1 1 auto;
+            max-width:794px;
+            display:flex;
+            gap:8px;
+            align-items:center;
+        }
+
+        /* 카드: 데스크에서 균등 */
+        .svc-card{
+            flex:1 1 0%;
+            min-width:0;
+        }
+
+        /* ===== Tablet 이하: 모바일 레이아웃처럼 확실히 전환 ===== */
+        /* ===== 모바일 전환(내가 만든 모바일 느낌) ===== */
+        @media (max-width: 1024px){
+            .svc-wrap{
+                padding:80px 16px;
+                gap:80px;
+            }
+            .svc-header{
+                width:100%;
+                max-width:560px;
+            }
+            .svc-row{
+                flex-direction:column;
+                align-items:center;
+                justify-content:center;
+                gap:16px;
+            }
+            .svc-quote{
+                width:100%;
+                max-width:560px;
+                flex:0 0 auto;
+                align-items:center;
+                text-align:center;
+            }
+            /* pl-[27px] 같은 들여쓰기 제거 */
+            .svc-quote .svc-indent{
+                padding-left:0 !important;
+                justify-content:center !important;
+            }
+
+            .svc-cards{
+                width:100%;
+                max-width:1024px;
+                align-items:stretch;
+            }
+            .svc-card{
+                flex:1 1 100%;
+                width:100%;
+            }
+
+            /* 모바일에서 카드 이미지 높이 살짝 줄임(원하면 178 유지해도 됨) */
+            .svc-img{
+                height:160px !important;
+            }
+        }
+
+        @media (max-width: 640px){
+            .svc-cards{
+                width:100%;
+                max-width:560px;
+                flex-direction:column;
+                align-items:stretch;
+            }
+            .svc-img{ display: none}
+            .svc-wrap{ padding:72px 16px; gap:64px; }
+            .svc-title{ font-size:32px !important; letter-spacing:-0.96px !important; }
+            .svc-quote-text{ font-size:18px !important; letter-spacing:-0.54px !important; }
+            .svc-card-title{ font-size:16px !important; }
+            .svc-card-desc{ font-size:14px !important; }
+        }
+
+        /* ===== Mobile: 타이포만 더 컴팩트 ===== */
+        @media (max-width: 799px){
+
+            .display{
+                padding: 64px 24px;
+                min-height: 588px;          /* 내가 준 코드와 맞춤 */
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            }
+            .display-inner{
+                max-width: var(--max);
+                gap: 16px;
+                flex-direction: column;     /* 핵심: 세로 스택 */
+                align-items: center;
+                justify-content: center;
+            }
+
+            .graphic-holder{ display:none; } /* 모바일에선 숨김(원하면 나중에 표시로 변경 가능) */
+
+            .headline-wrap{
+                width:100%;
+                max-width: var(--max);
+                gap: 16px;
+                align-items: center;        /* 중앙 정렬 */
+                text-align:center;
+            }
+
+            .headline{
+                font-size: 40px;            /* 태블릿에서도 데스크 느낌 유지 */
+                text-align:center;
+            }
+
+            .bubbles{
+                align-items:center;         /* 말풍선 가운데로 */
+                padding-right:0;
+            }
+
+            .bubble{
+                padding: 4px 8px;           /* 내가 준 모바일 스타일에 가깝게 */
+            }
+
+            .bubble p{
+                font-size: 18px;
+                letter-spacing: -0.36px;
+                white-space: normal;        /* 모바일에서는 줄바꿈 허용 */
+                text-align:center;
+            }
+
+            /* CTA: 내가 준 모바일 코드처럼 세로 스택 + 중앙 */
+            .cta{
+                padding: 36px 16px;
+            }
+            .cta-inner{
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+            .cta-text{
+                width: 100%;
+                align-items: center;
+                text-align: center;
+            }
+            .btn-row{
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* 후기 컨테이너: 내가 준 코드처럼 height 160 + 좌/우 blur 폭 맞춤 */
+            .reviews{
+                width:100%;
+                height:160px;
+                padding: 0;
+            }
+
+            /* 네 blur는 56px인데, 내가 준 건 16/18px 얇은 그라데이션이었음.
+               "내가 준 것처럼"이라면 아래처럼 폭을 줄여야 비슷하게 보임 */
+            .fade-left, .fade-right{
+                width: 18px;
+                height:160px;
+            }
+
+
+            .display{
+                padding: 56px 16px;
+                min-height: 588px;
+            }
+            .headline{
+                font-size: 32px;
+                letter-spacing: -0.96px;
+            }
+            .bubble p{
+                font-size: 18px;
+            }
+            .cta{
+                padding: 36px 16px;
+            }
+        }
+
+        :root{
+            --bg:#111217;
+            --accent:#9763f0;
+            --lime:#c9ff7e;
+            --muted:#f0f3f6;
+            --dot:#9196a0;
+            --w:1280px;
+            --h:728px;
+            --dash: rgba(17,18,23,0.85);
+            --radius:2px;
+            --font: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+        }
+        *{ box-sizing:border-box; }
+        body{ margin:0; background:#000; font-family:var(--font); }
+
+        a{ color:inherit; text-decoration:none; }
+        a:hover .openlink{ filter:brightness(1.05); }
+
+        /* ===== wrapper ===== */
+        .footer{
+            position:relative;
+            width:100%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#000;
+        }
+
+        /* ===== desktop artboard (>=1024px) ===== */
+        .section{
+            position:relative;
+            width:var(--w);
+            height:var(--h);
+            overflow:hidden;
+            background:var(--bg);
+            border-radius:12px;
+        }
+
+        .section__bg{
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            z-index:0;
+        }
+        .section__bg .base{ position:absolute; inset:0; background:var(--bg); }
+        .section__bg img{
+            position:absolute; inset:0;
+            width:100%; height:100%;
+            object-fit:cover;
+            mix-blend-mode:color-burn;
+        }
+
+        /* RIGHT: Infos (desktop) */
+        .infos{
+            position:absolute;
+            top:0; right:0;
+            width:526px;
+            height:728px;
+            z-index:2;
+            border-right:1px dashed var(--dash);
+        }
+
+        .infos__contact{
+            position:absolute;
+            left:0; top:0;
+            width:526px;
+            height:436px;
+            background:var(--accent);
+            overflow:hidden;
+        }
+
+        .info-info{
+            position:absolute;
+            left:44px; right:44px;
+            top:92px;
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+            z-index:3;
+        }
+
+        .telfax{ display:flex; gap:16px; }
+        .tel, .fax{
+            flex:1 0 0;
+            padding-top:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .email{
+            width:438px;
+            height:66px;
+            padding-top:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+        .instagram{
+            width:100%;
+            padding-top:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .textbox{
+            height:36px;
+            width:100%;
+            border-radius:var(--radius);
+            display:flex;
+            align-items:center;
+            background:var(--accent);
+            position:relative;
+            overflow:hidden;
+        }
+        .textbox::after{
+            content:"";
+            position:absolute; inset:0;
+            border-radius:inherit;
+            pointer-events:none;
+            box-shadow: inset 4px 4px 4px rgba(0,0,0,0.25);
+        }
+
+        .textbox .pad{
+            padding:0 8px;
+            width:100%;
+            display:flex;
+            align-items:center;
+        }
+        .textbox p{
+            margin:0;
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:-0.54px;
+            color:#fff;
+            line-height:1.4;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+
+        .row-link{
+            display:flex;
+            gap:6px;
+            align-items:flex-start;
+            width:100%;
+        }
+
+        .openpage{
+            width:36px;
+            height:36px;
+            border-radius:var(--radius);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:0 8px;
+            flex:0 0 auto;
+            background:var(--accent);
+            position:relative;
+        }
+        .openpage::after{
+            content:"";
+            position:absolute; inset:0;
+            border-radius:inherit;
+            pointer-events:none;
+            box-shadow: inset 4px 4px 4px rgba(0,0,0,0.25);
+        }
+
+        .openlink{
+            width:24px;
+            height:24px;
+            border-radius:999px;
+            border:1px solid #fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+            z-index:1;
+        }
+        .openlink svg{ width:11px; height:11px; display:block; }
+
+        /* paper background inside purple */
+        .paper{
+            position:absolute;
+            inset:-8px -8px 8px 8px; /* top right bottom left */
+            overflow:hidden;
+            z-index:1;
+            pointer-events:none;
+        }
+        .paper .subtract{
+            position:absolute;
+            left:0; top:0;
+            width:526px; height:436px;
+        }
+        .paper .subtract img{
+            position:absolute;
+            inset:0;
+            width:534px;
+            height:444px;
+            object-fit:cover;
+        }
+
+        /* captions */
+        .caption{
+            position:absolute;
+            display:flex;
+            gap:2px;
+            align-items:center;
+            z-index:4;
+            color:var(--muted);
+            font-size:16px;
+            letter-spacing:-0.32px;
+            pointer-events:none;
+        }
+        .caption .icon{
+            width:24px; height:24px;
+            position:relative;
+            overflow:hidden;
+            flex:0 0 auto;
+        }
+        .caption p{ margin:0; line-height:1.6; }
+
+        .caption.tel{ left:44px; top:92px; }
+        .caption.fax{ left:271px; top:92px; }
+        .caption.email{ left:44px; top:175px; }
+        .caption.ig{ left:44px; top:258px; }
+
+        /* Address block (desktop) */
+        .infos__address{
+            position:absolute;
+            left:0;
+            top:436px;
+            width:526px;
+            height:292px;
+            z-index:2;
+            border-top:1px dashed var(--dash);
+            background:transparent;
+        }
+        .add{
+            position:absolute;
+            left:47px;
+            right:44px;
+            top:48px;
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+        }
+        .add .caption-inline{
+            display:flex;
+            gap:2px;
+            align-items:center;
+            color:#fff;
+            font-size:16px;
+            letter-spacing:-0.32px;
+        }
+        .add .caption-inline .icon{ width:24px; height:24px; position:relative; overflow:hidden; }
+        .addr{ display:flex; flex-direction:column; gap:4px; color:#fff; }
+        .addr .kor{
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:-0.36px;
+            line-height:1.6;
+            margin:0;
+        }
+        .addr .eng{
+            display:flex;
+            flex-wrap:wrap;
+            gap:0 8px;
+            align-items:center;
+            margin:0;
+        }
+        .addr .eng span{
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:-0.54px;
+            line-height:1.4;
+            color:#fff;
+            white-space:nowrap;
+        }
+        .addr .eng i{
+            width:4px; height:4px;
+            background:var(--dot);
+            display:inline-block;
+            flex:0 0 auto;
+            margin:0 2px;
+            align-self:center;
+        }
+
+        /* LEFT: Brand (desktop) */
+        .brand{
+            position:absolute;
+            left:0; top:0;
+            width:754px;
+            height:728px;
+            z-index:1;
+            border-left:1px dashed var(--dash);
+            border-right:1px dashed var(--dash);
+            overflow:hidden;
+        }
+        /*.mock{
+            position:absolute;
+            left:89px;
+            bottom:-0.33px;
+            width:586px;
+            height:618px;
+            -webkit-mask-image: url("./assets/mask.png");
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 585.861px 642.033px;
+            -webkit-mask-position: 0.512px -0.333px;
+            mask-image: url("./assets/mask.png");
+            mask-repeat: no-repeat;
+            mask-size: 585.861px 642.033px;
+            mask-position: 0.512px -0.333px;
+        }
+        .mock img{
+            position:absolute; inset:0;
+            width:100%; height:100%;
+            object-fit:cover;
+            pointer-events:none;
+        }*/
+
+        .brandmsg{
+            position:absolute;
+            left:19px;
+            top:92px;
+            width:182px;
+            height:93px;
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            z-index:3;
+        }
+        .msgline{ width:100%; display:flex; align-items:center; }
+        .msgline .leftpad{
+            width:100%;
+            display:flex;
+            align-items:center;
+            padding-left:12px;
+            gap:0;
+        }
+        .badge{
+            width:12px;
+            height:23px;
+            border-radius:2px;
+            background:var(--lime);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#111217;
+            font-size:16px;
+            line-height:1.6;
+            box-shadow: inset 1px 1px 4px rgba(17,18,23,0.5);
+            flex:0 0 auto;
+        }
+        .badge.n{ box-shadow: inset 1px 4px 4px rgba(17,18,23,0.5); }
+        .badge.x{ box-shadow: inset 1px 1px 2px rgba(17,18,23,0.5); }
+
+        .word{
+            height:23px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:2px;
+            padding:0 2px;
+            color:#fff;
+            font-size:16px;
+            line-height:1.6;
+            letter-spacing:-0.32px;
+            white-space:nowrap;
+        }
+        .word.single{ width:12px; padding:0; }
+
+        /* ===== mobile layout (<1024px): stack, fluid, no fixed 1280x728 ===== */
+        @media (max-width: 1023px){
+            .footer{ padding:0; min-height:auto; }
+            .section{
+                width:100%;
+                height:auto;
+                border-radius:0;
+                overflow:hidden;
+            }
+
+            /* make it column flow */
+            .brand, .infos{
+                position:relative;
+                width:100%;
+                height:auto;
+                border:0;
+            }
+
+            /* Brand becomes top block */
+            .brand{
+                padding:24px 18px;
+                border-bottom:1px dashed var(--dash);
+            }
+
+            .brandmsg{
+                position:relative;
+                left:auto; top:auto;
+                width:100%;
+                height:auto;
+                padding:6px 0 0;
+            }
+            .msgline .leftpad{ padding-left:0; }
+
+            /* Infos becomes bottom block */
+            .infos{
+                border:0;
+            }
+            .infos__contact{
+                position:relative;
+                width:100%;
+                height:auto;
+                background:transparent;
+                padding:24px 18px 16px;
+            }
+
+            /* Use section bg for contact area too (like the React version) */
+            .infos__contact::before{
+                content:"";
+                position:absolute;
+                inset:0;
+                background:var(--bg);
+                z-index:0;
+            }
+            .infos__contact::after{
+                content:"";
+                position:absolute;
+                inset:0;
+                background:var(--bg);
+                opacity:0.0;
+                z-index:0;
+            }
+
+            .paper{ display:none; } /* 모바일은 깔끔하게 */
+            .caption{ position:static; pointer-events:auto; margin-top:14px; }
+            .caption.tel, .caption.fax, .caption.email, .caption.ig{ left:auto; top:auto; }
+
+            .info-info{
+                position:relative;
+                left:auto; right:auto; top:auto;
+                z-index:2;
+                gap:14px;
+            }
+
+            .telfax{ flex-direction:column; gap:14px; }
+            .tel, .fax{ padding-top:0; }
+            .email{ width:100%; height:auto; padding-top:0; }
+            .instagram{ padding-top:0; }
+
+            .textbox{ background:var(--accent); }
+            .textbox p{ font-size:16px; }
+
+            .infos__address{
+                position:relative;
+                top:auto;
+                width:100%;
+                height:auto;
+                border-top:1px dashed var(--dash);
+                padding:18px 18px 28px;
+            }
+            .add{
+                position:relative;
+                left:auto; right:auto; top:auto;
+                gap:10px;
+            }
+            .addr .kor{ font-size:16px; }
+            .addr .eng span{ font-size:14px; }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<!-- =========================
+  Banner
+========================= -->
+<section class="banner" data-name="BANNER">
+
+    <div class="display" data-name="Display">
+        <div class="display-inner">
+
+            <div class="headline-wrap" data-name="텍스트">
+                <h2 class="headline">
+                    대표님,<br/>
+                    이런 <span>고민</span>을 겪고 계시진 않았나요?
+                </h2>
+
+                <div class="bubbles" data-name="고민들">
+                    <div class="bubble"><p>제품은 좋은데, <span class="purple">고객이 이해하지 못한다</span>고 느끼시나요?</p></div>
+                    <div class="bubble"><p>웹/앱 경험이 산만해, <span class="purple">사용자가 이탈</span>하진 않나요?</p></div>
+                    <div class="bubble"><p><span class="purple">고객 피드백</span>을 반영하고 있나요?</p></div>
+                </div>
+            </div>
+            <img class="graphic-holder" src="../../src/assets/img/inx/graphic.png">
+        </div>
+    </div>
+
+    <div class="cta" data-name="CTA">
+        <div class="cta-inner">
+
+            <div class="cta-text">
+                <p class="cta-title">
+                    <span class="lime">전략이 보이는 디자인</span><br/>
+                    INX와 함께하세요
+                </p>
+
+                <div class="btn-row">
+                    <button class="btn-inquiry" type="button"><span>바로 문의하기</span></button>
+
+                    <a class="btn-brochure"
+                       href="https://drive.google.com/file/d/1Jk8R5wGMRRW-ULxiNFJRVSC0A9w3roIL/view?usp=sharing"
+                       target="_blank" rel="noreferrer">
+              <span class="inner">
+                <strong>회사소개서</strong>
+                <span class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 18 17" fill="none" aria-hidden="true">
+                    <path d="M9.5 0V12.25L14.75 7L15.5 7.66L9 14.16L2.5 7.66L3.25 7L8.5 12.25V0H9.5ZM0 14H1V16H17V14H18V17H0V14Z" fill="#111217"/>
+                  </svg>
+                </span>
+              </span>
+                <span class="gloss"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="reviews" data-name="후기컨테이너">
+                <div class="lane" data-name="후기"></div>
+                <div class="fade-left" aria-hidden="true"></div>
+                <div class="fade-right" aria-hidden="true"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================
+  아래 섹션들은 “틀”만: Tailwind로 빠르게 배치
+  (원본 코드 붙일 거면 이 아래에 ‘섹션별로’ 넣는 게 안전)
+========================= -->
+
+<section class="bg-white py-[120px]">
+    <div class="max-w-[1280px] mx-auto px-[28px]">
+        <div class="border-b border-[#dadde1] pb-[40px] text-center">
+            <p class="text-[#9763f0]  text-[18px] tracking-[-0.54px]">PORTFOLIO</p>
+            <p class="text-[#111217]  text-[40px] tracking-[-1.2px]">INX의 포트폴리오</p>
+            <div class="max-w-[1280px] relative shrink-0 w-full" data-name="tags">
+                <div class="flex flex-row items-center justify-center max-w-[inherit] w-full">
+                    <div class="content-stretch cursor-pointer flex gap-[7px] items-center justify-center max-w-[inherit] px-[28px] relative w-full">
+                        <button class="relative rounded-[100px] shrink-0" data-name="tag" type="button">
+                            <div class="flex flex-row items-center justify-center">
+                                <div class="content-stretch flex items-center justify-center px-[12px] relative py-[6px]">
+                                    <p class="css-ew64yg font-['Pretendard:Regular',sans-serif] leading-[1.4] not-italic relative shrink-0 text-[#353841] text-[18px] text-left tracking-[-0.54px]">UXUI 디자인</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button class="relative rounded-[100px] shrink-0" data-name="tag" type="button">
+                            <div class="flex flex-row items-center justify-center">
+                                <div class="content-stretch flex items-center justify-center px-[12px] relative py-[6px]">
+                                    <p class="css-ew64yg font-['Pretendard:Regular',sans-serif] leading-[1.4] not-italic relative shrink-0 text-[#353841] text-[18px] text-left tracking-[-0.54px]">디자인컨설팅</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button class="relative rounded-[100px] shrink-0" data-name="tag" type="button">
+                            <div class="flex flex-row items-center justify-center">
+                                <div class="content-stretch flex items-center justify-center px-[12px] relative py-[6px]">
+                                    <p class="css-ew64yg font-['Pretendard:Regular',sans-serif] leading-[1.4] not-italic relative shrink-0 text-[#353841] text-[18px] text-left tracking-[-0.54px]">공공디자인</p>
+                                </div>
+                            </div>
+                        </button>
+
+                        <button class="relative rounded-[100px] shrink-0" data-name="tag" type="button">
+                            <div class="flex flex-row items-center justify-center">
+                                <div class="content-stretch flex items-center justify-center px-[12px] relative py-[6px]">
+                                    <p class="css-ew64yg font-['Pretendard:Regular',sans-serif] leading-[1.4] not-italic relative shrink-0 text-[#353841] text-[18px] text-left tracking-[-0.54px]">안전디자인</p>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- TODO: 포트폴리오 카드 -->
+        <div class="bg-white content-stretch flex flex-col gap-[40px] items-center relative min-h-screen" data-name="Projects">
+            <!-- =============== Text 섹션 =============== -->
+            <div class="relative shrink-0 w-full" data-name="text">
+
+                <div class="flex flex-col items-center w-full">
+                    <div class="content-stretch flex flex-col gap-[8px] items-center pb-[40px] px-[28px] relative w-full">
+
+                        <!-- Title -->
+                    </div>
+                </div>
+            </div>
+            <!-- =============== /Text 섹션 =============== -->
+
+            <!-- =============== Projects 리스트 영역(현재 빈 projs 2개) =============== -->
+            <div class="content-stretch flex flex-col gap-[40px] items-start relative shrink-0 w-full" data-name="Projects">
+                <div class="shrink-0 w-full" data-name="projs">
+                    <!-- TODO: 여기에 카드/그리드 넣기 -->
+                </div>
+                <div class="shrink-0 w-full" data-name="projs">
+                    <!-- TODO: 여기에 카드/그리드 넣기 -->
+                </div>
+            </div>
+            <!-- =============== /Projects 리스트 영역 =============== -->
+        </div>
+    </div>
+</section>
+
+<section class="bg-[#111217] py-[25px] px-[15px] text-white">
+    <div class="max-w-[1280px] mx-auto">
+
+        <!-- TODO: 서비스 카드 -->
+        <section class="svc-wrap" data-name="Service">
+
+            <!-- Header Text -->
+            <div class="text-center">
+                <p class="text-[#9763f0]  text-[18px] tracking-[-0.54px]">SERVICE</p>
+                <p class=" text-[40px] tracking-[-1.2px]">INX의 서비스</p>
+            </div>
+
+            <!-- Content Blocks -->
+            <div class="svc-blocks" data-name="서비스">
+
+                <!-- ===== Row 1 ===== -->
+                <div class="svc-row" data-name="contents">
+
+                    <!-- Left Quote Text -->
+                    <div class="svc-quote" data-name="text">
+                        <div class="relative w-full">
+                            <div class="content-stretch flex gap-[4px] items-start py-[8px] relative shrink-0 w-full justify-center">
+                                <div aria-hidden="true" class="absolute border-[#353841] border-b border-solid border-t inset-0 pointer-events-none"></div>
+
+                                <!-- double quote left (빈 path 유지) -->
+                                <div class="relative shrink-0 size-[24px]" aria-hidden="true">
+                                    <svg class="block size-full" viewBox="0 0 24 24" fill="none">
+                                        <path d="" fill="white"></path>
+                                    </svg>
+                                </div>
+
+                                <p class="css-ew64yg svc-quote-text font-['Pretendard:Bold',sans-serif] leading-[1.4] not-italic relative shrink-0 text-[#c9ff7e] text-[20px] text-center tracking-[-0.6px]">
+                                    클라이언트가 기술은 있는데
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="relative w-full">
+                            <div aria-hidden="true" class="absolute border-[#353841] border-b border-solid inset-0 pointer-events-none"></div>
+                            <div class="content-stretch flex gap-[4px] items-start py-[8px] relative w-full svc-indent pl-[27px] justify-center">
+                                <p class="css-ew64yg svc-quote-text font-['Pretendard:Bold',sans-serif] leading-[1.4] not-italic relative shrink-0 text-[#c9ff7e] text-[20px] text-center tracking-[-0.6px]">
+                                    고객들에게 노출되는 서비스가 없을 때
+                                </p>
+                                <!-- double quote right (빈 path 유지) -->
+                                <div class="relative shrink-0 size-[24px]" aria-hidden="true">
+                                    <svg class="block size-full" viewBox="0 0 24 24" fill="none">
+                                        <path d="" fill="white"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Service Cards (3) -->
+                    <div class="svc-cards" data-name="제공서비스">
+
+                        <!-- Card 1 -->
+                        <div class="svc-card relative rounded-[8px]" data-name="제공서비스">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="content-stretch flex flex-col items-start relative w-full">
+
+                                    <!-- Image -->
+                                    <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative shrink-0 w-full">
+                                        <div class="absolute inset-[-10px_-14px]">
+                                            <img src="../../src/assets/img/inx/service/img.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                            <div class="absolute bg-[#353841] inset-0 mix-blend-color"></div>
+                                            <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                        </div>
+<!--                                        <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                            <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                                Journey<br />Map
+                                            </p>
+                                        </div>-->
+                                    </div>
+
+                                    <!-- Text -->
+                                    <div class="bg-[rgba(255,255,255,0.2)] relative w-full">
+                                        <div class="content-stretch flex flex-col gap-[4px] items-start p-[16px] w-full">
+                                            <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] leading-[1.4] text-[18px] text-white tracking-[-0.54px] w-full">
+                                                고객 여정 설계
+                                            </p>
+                                            <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] leading-[1.6] text-[#f0f3f6] text-[16px] tracking-[-0.32px] w-full">
+                                                고객이 우리 서비스를 어떻게 만나고 구매하는지 단계별 경험 지도
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute border border-[rgba(255,255,255,0.2)] inset-0 pointer-events-none rounded-[8px]"></div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="svc-card relative rounded-[8px]" data-name="제공서비스">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="content-stretch flex flex-col items-start relative w-full">
+                                    <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative shrink-0 w-full">
+                                        <div class="absolute inset-[-10px_-14px]">
+                                            <img src="../../src/assets/img/inx/service/img2.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                            <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                            <div class="absolute bg-black inset-0 mix-blend-hue"></div>
+                                        </div>
+<!--                                        <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                            <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                                Service<br />Strategy
+                                            </p>
+                                        </div>-->
+                                    </div>
+
+                                    <div class="bg-[rgba(255,255,255,0.2)] relative w-full">
+                                        <div class="content-stretch flex flex-col gap-[4px] items-start p-[16px] w-full">
+                                            <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] leading-[1.4] text-[18px] text-white tracking-[-0.54px] w-full">
+                                                서비스 전략
+                                            </p>
+                                            <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] leading-[1.6] text-[#f0f3f6] text-[16px] tracking-[-0.32px] w-full">
+                                                누구에게, 무엇을, 어떻게 팔 것인지 핵심 방향 수립
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute border border-[rgba(255,255,255,0.2)] inset-0 pointer-events-none rounded-[8px]"></div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="svc-card relative rounded-[8px]" data-name="제공서비스">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="content-stretch flex flex-col items-start relative w-full">
+                                    <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative shrink-0 w-full">
+                                        <div class="absolute inset-[-10px_-14px]">
+                                            <img src="../../src/assets/img/inx/service/img3.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                            <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                        </div>
+<!--                                        <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                            <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                                Business<br />Modeling
+                                            </p>
+                                        </div>-->
+                                    </div>
+
+                                    <div class="bg-[rgba(255,255,255,0.2)] relative w-full">
+                                        <div class="content-stretch flex flex-col gap-[4px] items-start p-[16px] w-full">
+                                            <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] leading-[1.4] text-[18px] text-white tracking-[-0.54px] w-full">
+                                                비즈니스 모델링
+                                            </p>
+                                            <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] leading-[1.6] text-[#f0f3f6] text-[16px] tracking-[-0.32px] w-full">
+                                                수익 구조와 운영 방식을<br />지속가능하게 설계
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute border border-[rgba(255,255,255,0.2)] inset-0 pointer-events-none rounded-[8px]"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ===== Row 2 ===== -->
+                <div class="svc-row" data-name="contents">
+
+                    <div class="svc-quote">
+                        <div class="relative w-full">
+                            <div class="content-stretch flex gap-[4px] items-start py-[8px] relative w-full justify-center">
+                                <div aria-hidden="true" class="absolute border-[#353841] border-b border-solid border-t inset-0 pointer-events-none"></div>
+                                <div class="relative shrink-0 size-[24px]" aria-hidden="true">
+                                    <svg class="block size-full" viewBox="0 0 24 24" fill="none"><path d="" fill="white"></path></svg>
+                                </div>
+                                <p class="css-ew64yg svc-quote-text font-['Pretendard:Bold',sans-serif] leading-[1.4] text-[#c9ff7e] text-[20px] text-center tracking-[-0.6px]">
+                                    서비스가 있기는 한데
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="relative w-full">
+                            <div aria-hidden="true" class="absolute border-[#353841] border-b border-solid inset-0 pointer-events-none"></div>
+                            <div class="content-stretch flex gap-[4px] items-start py-[8px] relative w-full svc-indent pl-[27px] justify-center">
+                                <p class="css-ew64yg svc-quote-text font-['Pretendard:Bold',sans-serif] leading-[1.4] text-[#c9ff7e] text-[20px] text-center tracking-[-0.6px]">
+                                    사용자가 어떻게 쓰는지 이해하지 못할 때
+                                </p>
+                                <div class="relative shrink-0 size-[24px]" aria-hidden="true">
+                                    <svg class="block size-full" viewBox="0 0 24 24" fill="none"><path d="" fill="white"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="svc-cards" data-name="제공서비스">
+                        <!-- 4 cards -->
+                        <div class="svc-card relative rounded-[8px]">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative">
+                                    <div class="absolute inset-[-10px_-14px]">
+                                        <img src="../../src/assets/img/inx/service/img4.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                        <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                    </div>
+<!--                                    <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                        <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                            UX<br />Planning
+                                        </p>
+                                    </div>-->
+                                </div>
+                                <div class="bg-[rgba(255,255,255,0.2)]">
+                                    <div class="p-[16px] flex flex-col gap-[4px]">
+                                        <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] text-[18px] text-white tracking-[-0.54px]">UX 기획</p>
+                                        <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] text-[16px] text-[#f0f3f6] tracking-[-0.32px] leading-[1.6]">고객이 쉽고 편하게 쓰도록 경로 설계</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 border border-[rgba(255,255,255,0.2)] rounded-[8px] pointer-events-none"></div>
+                        </div>
+
+                        <div class="svc-card relative rounded-[8px]">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative">
+                                    <div class="absolute inset-[-10px_-14px]">
+                                        <img src="../../src/assets/img/inx/service/img5.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                        <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                    </div>
+<!--                                    <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                        <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                            UI System<br />Definition
+                                        </p>
+                                    </div>-->
+                                </div>
+                                <div class="bg-[rgba(255,255,255,0.2)]">
+                                    <div class="p-[16px] flex flex-col gap-[4px]">
+                                        <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] text-[18px] text-white tracking-[-0.54px]">UI 시스템 정의</p>
+                                        <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] text-[16px] text-[#f0f3f6] tracking-[-0.32px] leading-[1.6]">우리만의 통일된<br />디자인 규칙 만들기</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 border border-[rgba(255,255,255,0.2)] rounded-[8px] pointer-events-none"></div>
+                        </div>
+
+                        <div class="svc-card relative rounded-[8px]">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative">
+                                    <div class="absolute inset-[-10px_-14px]">
+                                        <img src="../../src/assets/img/inx/service/img6.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                        <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                    </div>
+<!--                                    <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                        <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                            Prototyping
+                                        </p>
+                                    </div>-->
+                                </div>
+                                <div class="bg-[rgba(255,255,255,0.2)]">
+                                    <div class="p-[16px] flex flex-col gap-[4px]">
+                                        <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] text-[18px] text-white tracking-[-0.54px]">프로토타이핑</p>
+                                        <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] text-[16px] text-[#f0f3f6] tracking-[-0.32px] leading-[1.6]">개발 전 미리 만들어보고<br />테스트</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 border border-[rgba(255,255,255,0.2)] rounded-[8px] pointer-events-none"></div>
+                        </div>
+
+                        <div class="svc-card relative rounded-[8px]">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative">
+                                    <div class="absolute inset-[-10px_-14px]">
+                                        <img src="../../src/assets/img/inx/service/img7.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                        <div class="absolute bg-[rgba(0,0,0,0.4)] inset-0"></div>
+                                    </div>
+<!--                                    <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                        <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                            Policy<br />Development
+                                        </p>
+                                    </div>-->
+                                </div>
+                                <div class="bg-[rgba(255,255,255,0.2)]">
+                                    <div class="p-[16px] flex flex-col gap-[4px]">
+                                        <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] text-[18px] text-white tracking-[-0.54px]">정책 만들기·정리</p>
+                                        <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] text-[16px] text-[#f0f3f6] tracking-[-0.32px] leading-[1.6]">서비스 운영에 필요한<br />약관·규정 정리</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 border border-[rgba(255,255,255,0.2)] rounded-[8px] pointer-events-none"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== Row 3 ===== -->
+                <div class="svc-row" data-name="contents">
+                    <div class="svc-quote">
+                        <div class="relative w-full">
+                            <div class="content-stretch flex gap-[4px] items-start py-[8px] relative w-full justify-center">
+                                <div aria-hidden="true" class="absolute border-[#353841] border-b border-solid border-t inset-0 pointer-events-none"></div>
+                                <div class="relative shrink-0 size-[24px]" aria-hidden="true"><svg class="block size-full" viewBox="0 0 24 24" fill="none"><path d="" fill="white"></path></svg></div>
+                                <p class="css-ew64yg svc-quote-text font-['Pretendard:Bold',sans-serif] leading-[1.4] text-[#c9ff7e] text-[20px] tracking-[-0.6px]">정부 지원 과제가 있는데</p>
+                            </div>
+                        </div>
+                        <div class="relative w-full">
+                            <div aria-hidden="true" class="absolute border-[#353841] border-b border-solid inset-0 pointer-events-none"></div>
+                            <div class="content-stretch flex gap-[4px] items-start py-[8px] relative w-full svc-indent pl-[27px] justify-center">
+                                <p class="css-ew64yg svc-quote-text font-['Pretendard:Bold',sans-serif] leading-[1.4] text-[#c9ff7e] text-[20px] tracking-[-0.6px]">
+                                    자사 제품/기술로 무엇을 만들지 막막할 때
+                                </p>
+                                <div class="relative shrink-0 size-[24px]" aria-hidden="true"><svg class="block size-full" viewBox="0 0 24 24" fill="none"><path d="" fill="white"></path></svg></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="svc-cards">
+                        <div class="svc-card relative rounded-[8px]">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative">
+                                    <div class="absolute inset-[-10px_-14px]">
+                                        <img src="../../src/assets/img/inx/service/img8.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                        <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                    </div>
+<!--                                    <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                        <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                            Grant<br />Consulting
+                                        </p>
+                                    </div>-->
+                                </div>
+                                <div class="bg-[rgba(255,255,255,0.2)]">
+                                    <div class="p-[16px] flex flex-col gap-[4px]">
+                                        <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] text-[18px] text-white tracking-[-0.54px]">지원사업 컨설팅</p>
+                                        <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] text-[16px] text-[#f0f3f6] tracking-[-0.32px] leading-[1.6]">
+                                            과제 목표에 맞는 결과물 기획부터<br />보고서 작성까지 전 과정 지원
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 border border-[rgba(255,255,255,0.2)] rounded-[8px] pointer-events-none"></div>
+                        </div>
+
+                        <div class="svc-card relative rounded-[8px]">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative">
+                                    <div class="absolute inset-[-10px_-14px]">
+                                        <img src="../../src/assets/img/inx/service/img9.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                        <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                    </div>
+<!--                                    <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                        <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                            Networking
+                                        </p>
+                                    </div>-->
+                                </div>
+                                <div class="bg-[rgba(255,255,255,0.2)]">
+                                    <div class="p-[16px] flex flex-col gap-[4px]">
+                                        <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] text-[18px] text-white tracking-[-0.54px]">협력사·고객 네트워크 만들기</p>
+                                        <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] text-[16px] text-[#f0f3f6] tracking-[-0.32px] leading-[1.6]">
+                                            기술을 활용할 파트너·고객 발굴하고<br />지속 가능한 협력 구조 만들기
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 border border-[rgba(255,255,255,0.2)] rounded-[8px] pointer-events-none"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== Row 4 ===== -->
+                <div class="svc-row" data-name="contents">
+                    <div class="svc-quote">
+                        <div class="relative w-full">
+                            <div class="content-stretch flex gap-[4px] items-start py-[8px] relative w-full justify-center">
+                                <div aria-hidden="true" class="absolute border-[#353841] border-b border-solid border-t inset-0 pointer-events-none"></div>
+                                <div class="relative shrink-0 size-[24px]" aria-hidden="true"><svg class="block size-full" viewBox="0 0 24 24" fill="none"><path d="" fill="white"></path></svg></div>
+                                <p class="css-ew64yg svc-quote-text font-['Pretendard:Bold',sans-serif] leading-[1.4] text-[#c9ff7e] text-[20px] tracking-[-0.6px]">현장 운영은 돌아가는데</p>
+                            </div>
+                        </div>
+                        <div class="relative w-full">
+                            <div aria-hidden="true" class="absolute border-[#353841] border-b border-solid inset-0 pointer-events-none"></div>
+                            <div class="content-stretch flex gap-[4px] items-start py-[8px] relative w-full svc-indent pl-[27px] justify-center">
+                                <p class="css-ew64yg svc-quote-text font-['Pretendard:Bold',sans-serif] leading-[1.4] text-[#c9ff7e] text-[20px] tracking-[-0.6px]">
+                                    직원, 관리자에게 보이는 시스템이 없을 때
+                                </p>
+                                <div class="relative shrink-0 size-[24px]" aria-hidden="true"><svg class="block size-full" viewBox="0 0 24 24" fill="none"><path d="" fill="white"></path></svg></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="svc-cards">
+                        <div class="svc-card relative rounded-[8px]">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative">
+                                    <div class="absolute inset-[-10px_-14px]">
+                                        <img src="../../src/assets/img/inx/service/img10.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                        <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                    </div>
+<!--                                    <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                        <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                            Management<br />System
+                                        </p>
+                                    </div>-->
+                                </div>
+                                <div class="bg-[rgba(255,255,255,0.2)]">
+                                    <div class="p-[16px] flex flex-col gap-[4px]">
+                                        <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] text-[18px] text-white tracking-[-0.54px]">내부 관리 시스템</p>
+                                        <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] text-[16px] text-[#f0f3f6] tracking-[-0.32px] leading-[1.6]">
+                                            업무 흐름을 디지털로 옮겨<br />실시간 확인·관리 가능하게
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 border border-[rgba(255,255,255,0.2)] rounded-[8px] pointer-events-none"></div>
+                        </div>
+
+                        <div class="svc-card relative rounded-[8px]">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative">
+                                    <div class="absolute inset-[-10px_-14px]">
+                                        <img src="../../src/assets/img/inx/service/img11.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                        <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                    </div>
+<!--                                    <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                        <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                            Dashboard
+                                        </p>
+                                    </div>-->
+                                </div>
+                                <div class="bg-[rgba(255,255,255,0.2)]">
+                                    <div class="p-[16px] flex flex-col gap-[4px]">
+                                        <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] text-[18px] text-white tracking-[-0.54px]">대시보드</p>
+                                        <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] text-[16px] text-[#f0f3f6] tracking-[-0.32px] leading-[1.6]">
+                                            핵심 지표를 한눈에 보고 빠르게<br />의사결정할 수 있도록
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 border border-[rgba(255,255,255,0.2)] rounded-[8px] pointer-events-none"></div>
+                        </div>
+
+                        <div class="svc-card relative rounded-[8px]">
+                            <div class="overflow-hidden rounded-[inherit]">
+                                <div class="bg-[#111217] svc-img h-[178px] overflow-hidden relative">
+                                    <div class="absolute inset-[-10px_-14px]">
+                                        <img src="../../src/assets/img/inx/service/img12.png" alt="" class="absolute inset-0 w-full h-full object-cover pointer-events-none" />
+                                        <div class="absolute bg-[rgba(0,0,0,0.2)] inset-0"></div>
+                                    </div>
+<!--                                    <div class="absolute left-[16px] right-[16px] top-1/2 -translate-y-1/2 flex items-center justify-center">
+                                        <p class="css-ew64yg font-['Roboto_Serif:Medium',sans-serif] font-medium leading-[1.4] text-[28px] text-center text-white tracking-[-0.84px]">
+                                            Team Tools
+                                        </p>
+                                    </div>-->
+                                </div>
+                                <div class="bg-[rgba(255,255,255,0.2)]">
+                                    <div class="p-[16px] flex flex-col gap-[4px]">
+                                        <p class="css-4hzbpn svc-card-title font-['Pretendard:Bold',sans-serif] text-[18px] text-white tracking-[-0.54px]">조직운영 도구 설계</p>
+                                        <p class="css-4hzbpn svc-card-desc font-['Pretendard:Regular',sans-serif] text-[16px] text-[#f0f3f6] tracking-[-0.32px] leading-[1.6]">
+                                            우리 회사 방식에 맞춘 직원 소통·<br />협업 시스템 구축
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div aria-hidden="true" class="absolute inset-0 border border-[rgba(255,255,255,0.2)] rounded-[8px] pointer-events-none"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+</section>
+
+
+        <!-- TODO: About 카드 3개 -->
+<section class="w-full px-[20px] sm:px-[28px] py-[80px] sm:py-[120px] flex flex-col items-center gap-[40px]" data-name="Process-여백" style="background-color: #f0f3f6;">
+    <!-- Title -->
+    <header class="w-full flex flex-col items-center gap-[8px] font-['Pretendard:Bold',sans-serif] leading-[1.4]">
+        <p class="text-[#9763f0] font-bold text-[18px] tracking-[-0.54px]">ABOUT</p>
+        <p class="text-[#111217]  text-[40px] tracking-[-1.2px]">Design Your Tomorrow</p>
+    </header>
+
+    <!-- Cards -->
+    <div class="w-full flex flex-col gap-[16px] items-center" data-name="About">
+
+        <!-- Card Component (반복) -->
+        <!-- Card 1 -->
+        <article class="w-full max-w-[809px] bg-white rounded-[20px]" data-name="Card">
+            <div class="w-full p-[8px] flex flex-col lg:flex-row md:flex-row gap-[16px] items-stretch lg:items-center">
+
+                <!-- Text -->
+                <div class="flex-1 min-w-0">
+                    <div class="pl-[8px] lg:pl-[12px] pt-[16px] lg:pt-0 flex flex-col gap-[12px]">
+                        <p class="text-[#9763f0] text-[18px] sm:text-[20px] tracking-[-0.6px] font-['Pretendard:Bold',sans-serif]">
+                            1. We are
+                        </p>
+
+                        <div class="text-[#111217] flex flex-col gap-[6px]">
+                            <p class="text-[20px] sm:text-[24px] tracking-[-0.72px] font-['Pretendard:Bold',sans-serif] leading-[1.4]">
+                                고객사를 <br class="hidden lg:block" />
+                                제대로 이해하는 팀
+                            </p>
+
+                            <p class="text-[16px] sm:text-[18px] tracking-[-0.36px] leading-[1.6] font-['Pretendard:Regular',sans-serif]" style="font-feature-settings:'lnum','tnum'">
+                                고객사의 상황을 깊이 파악하고,<br class="hidden lg:block" />
+                                가장 알맞은 <span class="font-['Pretendard:Bold',sans-serif]">프로세스·전략·커뮤니케이션</span>을 제공합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media -->
+                <div class="flex-1 min-w-0">
+                    <div class="w-full rounded-[12px] overflow-hidden bg-[#f0f3f6] aspect-[818/460] flex items-center justify-center text-sm text-slate-500">
+                        <img src="../assets/img/inx/tommrow/img-ratio.png">
+                    </div>
+                </div>
+
+            </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="w-full max-w-[809px] bg-white rounded-[20px]" data-name="Card">
+            <div class="w-full p-[8px] flex flex-col lg:flex-row md:flex-row gap-[16px] items-stretch lg:items-center">
+
+                <div class="flex-1 min-w-0">
+                    <div class="pl-[8px] lg:pl-[12px] pt-[16px] lg:pt-0 flex flex-col gap-[12px]">
+                        <p class="text-[#9763f0] text-[18px] sm:text-[20px] tracking-[-0.6px] font-['Pretendard:Bold',sans-serif]">
+                            2. How
+                        </p>
+
+                        <div class="text-[#111217] flex flex-col gap-[6px]">
+                            <p class="text-[20px] sm:text-[24px] tracking-[-0.72px] font-['Pretendard:Bold',sans-serif] leading-[1.4]">
+                                기획부터 실행까지 <br class="hidden lg:block" />
+                                책임지는 전문가
+                            </p>
+
+                            <p class="text-[16px] sm:text-[18px] tracking-[-0.36px] leading-[1.6] font-['Pretendard:Regular',sans-serif]" style="font-feature-settings:'lnum','tnum'">
+                                경험 많은 연구진이 처음부터 끝까지<br class="hidden lg:block" />
+                                <span class="font-['Pretendard:Bold',sans-serif]">완성도 있게</span> 프로젝트를 이끌어갑니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                    <div class="w-full rounded-[12px] overflow-hidden bg-[#f0f3f6] aspect-[818/460] flex items-center justify-center text-sm text-slate-500">
+                        <img src="../assets/img/inx/tommrow/img-ratio2.png">
+                    </div>
+                </div>
+
+            </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="w-full max-w-[809px] bg-white rounded-[20px]" data-name="Card">
+            <div class="w-full p-[8px] flex flex-col lg:flex-row md:flex-row gap-[16px] items-stretch lg:items-center">
+
+                <div class="flex-1 min-w-0">
+                    <div class="pl-[8px] lg:pl-[12px] pt-[16px] lg:pt-0 flex flex-col gap-[12px]">
+                        <p class="text-[#9763f0] text-[18px] sm:text-[20px] tracking-[-0.6px] font-['Pretendard:Bold',sans-serif]">
+                            3. Why us
+                        </p>
+
+                        <div class="text-[#111217] flex flex-col gap-[6px]">
+                            <p class="text-[20px] sm:text-[24px] tracking-[-0.72px] font-['Pretendard:Bold',sans-serif] leading-[1.4]">
+                                예쁘기만 한 디자인을 <br class="hidden lg:block" />
+                                만들지 않습니다.
+                            </p>
+
+                            <p class="text-[16px] sm:text-[18px] tracking-[-0.36px] leading-[1.6] font-['Pretendard:Regular',sans-serif]" style="font-feature-settings:'lnum','tnum'">
+                                비즈니스 전략을 반영한 결과물로<br class="hidden lg:block" />
+                                <span class="font-['Pretendard:Bold',sans-serif]">성과</span>를 만드는 팀입니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                    <div class="w-full rounded-[12px] overflow-hidden bg-[#f0f3f6] aspect-[818/460] flex items-center justify-center text-sm text-slate-500">
+                        <img src="../assets/img/inx/tommrow/img-ratio3.png">
+                    </div>
+                </div>
+
+            </div>
+        </article>
+
+    </div>
+</section>
+<div class="footer">
+    <section class="section" aria-label="Footer Section">
+
+        <!-- Background -->
+        <div class="section__bg" aria-hidden="true">
+            <div class="base"></div>
+            <!-- TODO: 배경 이미지 경로 -->
+<!--            <img src="" alt="" />-->
+        </div>
+
+        <!-- LEFT: BRAND -->
+        <section class="brand" aria-label="Brand">
+            <div class="mock" aria-hidden="true">
+                <!-- TODO: mockup 이미지 경로 -->
+                <img src="../../src/assets/img/inx/INX-card.png" alt="" />
+            </div>
+
+            <div class="brandmsg" aria-label="Brand message">
+                <div class="msgline">
+                    <div class="leftpad">
+                        <div class="badge">I</div>
+                        <div class="word">nsight driven</div>
+                    </div>
+                </div>
+                <div class="msgline">
+                    <div class="leftpad">
+                        <div class="badge n">N</div>
+                        <div class="word">avigated by emphathy</div>
+                    </div>
+                </div>
+                <div class="msgline">
+                    <div class="word single">e</div>
+                    <div class="badge x">X</div>
+                    <div class="word">perience shaped</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT: INFOS -->
+        <aside class="infos" aria-label="Infos">
+            <div class="infos__contact" aria-label="INX-Info-Contact">
+                <!-- mobile captions (desktop에서도 표시되지만 paper 위로 안 보이게 하려면 paper가 덮음) -->
+                <div class="caption tel">
+            <span class="icon">
+              <!-- Tel icon placeholder -->
+              <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden="true">
+                <path d="M0 0H20V20H0Z" fill="#fff"></path>
+              </svg>
+            </span>
+                    <p>Tel.</p>
+                </div>
+
+                <div class="caption fax">
+            <span class="icon">
+              <!-- Fax icon placeholder -->
+              <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden="true">
+                <path d="M0 0H20V20H0Z" fill="#DADDE1"></path>
+              </svg>
+            </span>
+                    <p>Fax</p>
+                </div>
+
+                <div class="caption email">
+            <span class="icon">
+              <!-- Email icon placeholder -->
+              <svg viewBox="0 0 18 14" width="24" height="24" aria-hidden="true">
+                <path d="M0 0H18V14H0Z" fill="none" stroke="#DADDE1"></path>
+              </svg>
+            </span>
+                    <p>Email</p>
+                </div>
+
+                <div class="caption ig">
+            <span class="icon">
+              <!-- Instagram icon placeholder -->
+              <svg viewBox="0 0 18 18" width="24" height="24" aria-hidden="true">
+                <path d="M0 0H18V18H0Z" fill="#DADDE1"></path>
+              </svg>
+            </span>
+                    <p>Instagram</p>
+                </div>
+
+                <!-- content list -->
+                <div class="info-info">
+                    <div class="telfax">
+                        <div class="tel">
+                            <div class="textbox"><div class="pad"><p>02-6223-6003</p></div></div>
+                        </div>
+                        <div class="fax">
+                            <div class="textbox"><div class="pad"><p>02-6223-6004</p></div></div>
+                        </div>
+                    </div>
+
+                    <div class="email">
+                        <div class="row-link">
+                            <div class="textbox" style="flex:1 0 0;"><div class="pad"><p>inx@i-nx.com</p></div></div>
+                            <a class="openpage" href="mailto:inx@i-nx.com" aria-label="Open email">
+                                <div class="openlink" aria-hidden="true">
+                                    <!-- OpenLink icon placeholder -->
+                                    <svg viewBox="0 0 10.9287 10.9082" fill="none" aria-hidden="true">
+                                        <path d="M0 0H10V10H0Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="instagram">
+                        <div class="row-link">
+                            <div class="textbox" style="flex:1 0 0;"><div class="pad"><p>@inx_design_consulting</p></div></div>
+                            <a class="openpage" href="https://www.instagram.com/inx_design_consulting/" target="_blank" rel="noreferrer" aria-label="Open instagram">
+                                <div class="openlink" aria-hidden="true">
+                                    <svg viewBox="0 0 10.9287 10.9082" fill="none" aria-hidden="true">
+                                        <path d="M0 0H10V10H0Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- desktop only paper overlay -->
+                <div class="paper" aria-hidden="true">
+                    <div class="subtract">
+                        <!-- TODO: paper 이미지 경로 -->
+                        <img  src="../../src/assets/img/inx/cardImg.png">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address panel -->
+            <div class="infos__address" aria-label="INX-Info-Add">
+                <div class="add">
+                    <div class="caption-inline">
+              <span class="icon">
+                <!-- Address icon placeholder -->
+                <svg viewBox="0 0 16 19" width="24" height="24" aria-hidden="true">
+                  <path d="M0 0H16V19H0Z" fill="#DADDE1"></path>
+                </svg>
+              </span>
+                        <span>Address</span>
+                    </div>
+
+                    <div class="addr">
+                        <p class="kor">07237 서울특별시 영등포구 여의나루로 53-1,<br/>대오빌딩 505호</p>
+                        <p class="eng" aria-label="English address">
+                            <span>505 Daeo Building</span><i></i>
+                            <span>53-1 Yeouinaru-ro</span><i></i>
+                            <span>Yeongdeungpo-gu, Seoul</span><i></i>
+                            <span>Republic of Korea</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </section>
+</div>
+<!-- Footer/Clients는 원본 CSS가 길어서, 섹션별로 따로 정리해 붙이는 걸 추천 -->
+</body>
+</html>

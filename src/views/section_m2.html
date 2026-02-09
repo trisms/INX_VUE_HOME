@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>DX - INX 서비스</title>
+
+    <!-- Pretendard (프로젝트에 이미 있으면 제거) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+    <style>
+        :root{
+            --bg:#111217;
+            --white:#fff;
+            --lime:#c9ff7e;
+            --violet:#9763f0;
+            --muted:#353841;
+            --card:rgba(255,255,255,0.2);
+            --cardBorder:rgba(255,255,255,0.2);
+            --textMuted:#f0f3f6;
+
+            --r8:8px;
+            --max:794px;
+        }
+
+        *{ box-sizing:border-box; }
+        body{
+            margin:0;
+            font-family:Pretendard,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+            background:var(--bg);
+            color:var(--white);
+        }
+        img{ display:block; max-width:100%; }
+        a{ color:inherit; text-decoration:none; }
+
+        /* ===== Section Root ===== */
+        .dx{
+            width:100%;
+            padding:120px 18px;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            gap:40px;
+            background:var(--bg);
+        }
+
+        /* ===== Top Title ===== */
+        .dx-title{
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:8px;
+            line-height:1.4;
+        }
+        .dx-title .kicker{
+            margin:0;
+            font-weight:800;
+            font-size:18px;
+            letter-spacing:-0.54px;
+            color:var(--violet);
+        }
+        .dx-title .headline{
+            margin:0;
+            font-weight:800;
+            font-size:40px;
+            letter-spacing:-1.2px;
+            text-align:center;
+        }
+
+        /* ===== Content Blocks Wrapper ===== */
+        .service{
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            gap:120px;
+            align-items:center;
+        }
+
+        /* ===== Each block ===== */
+        .block{
+            width:100%;
+            max-width:var(--max);
+            display:flex;
+            flex-direction:column;
+            gap:20px;
+            align-items:stretch;
+        }
+
+        /* Quote Lines */
+        .quote{
+            width:100%;
+            display:flex;
+            flex-direction:column;
+        }
+        .quote-line{
+            position:relative;
+            width:100%;
+            display:flex;
+            gap:4px;
+            align-items:flex-start;
+            justify-content:center;
+            padding:8px 0;
+            text-align:center;
+        }
+        .quote-line.top::before{
+            content:"";
+            position:absolute;
+            inset:0;
+            border-top:1px solid var(--muted);
+            border-bottom:1px solid var(--muted);
+            pointer-events:none;
+        }
+        .quote-line.bottom::before{
+            content:"";
+            position:absolute;
+            inset:0;
+            border-bottom:1px solid var(--muted);
+            pointer-events:none;
+        }
+        .quote-line p{
+            margin:0;
+            font-weight:800;
+            font-size:20px;
+            line-height:1.4;
+            letter-spacing:-0.6px;
+            color:var(--lime);
+            white-space:pre-wrap;
+        }
+
+        /* Simple quote icon (replace with original svgPaths if you want 1:1) */
+        .qicon{
+            width:16px;
+            height:16px;
+            flex:0 0 16px;
+            opacity:0.95;
+            margin-top:2px;
+        }
+        .qicon svg{ width:100%; height:100%; display:block; }
+
+        /* Cards list */
+        .cards{
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            align-items:center;
+        }
+
+        /* Card */
+        .card{
+            width:100%;
+            position:relative;
+            border-radius:var(--r8);
+            overflow:hidden;
+        }
+        .card::after{
+            content:"";
+            position:absolute;
+            inset:0;
+            border:1px solid var(--cardBorder);
+            border-radius:var(--r8);
+            pointer-events:none;
+        }
+
+        /* Card inner: Desktop/ Mobile variants */
+        .card-inner{
+            width:100%;
+            display:flex;
+            overflow:hidden;
+            border-radius:inherit;
+        }
+
+        /* Default: Mobile-style card (text only) */
+        .card-text{
+            flex:1 1 auto;
+            background:var(--card);
+            padding:16px;
+            display:flex;
+            flex-direction:column;
+            gap:4px;
+        }
+        .card-text .title{
+            margin:0;
+            font-weight:800;
+            font-size:18px;
+            line-height:1.4;
+            letter-spacing:-0.54px;
+            color:var(--white);
+        }
+        .card-text .desc{
+            margin:0;
+            font-weight:400;
+            font-size:16px;
+            line-height:1.6;
+            letter-spacing:-0.32px;
+            color:var(--textMuted);
+        }
+
+        /* Desktop “with image header” card */
+        .card-img{
+            height:178px;
+            position:relative;
+            background:#111217;
+            overflow:hidden;
+        }
+        .card-img img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            transform:translate(-14px,-10px); /* figma absolute inset mimic */
+            width:calc(100% + 28px);
+            height:calc(100% + 20px);
+        }
+        .card-img .overlay-color{
+            position:absolute;
+            inset:0;
+            background:var(--muted);
+            mix-blend-mode:color;
+            pointer-events:none;
+        }
+        .card-img .overlay-dim{
+            position:absolute;
+            inset:0;
+            background:rgba(0,0,0,0.2);
+            pointer-events:none;
+        }
+        .card-img .eng{
+            position:absolute;
+            left:16px; right:16px;
+            top:50%;
+            transform:translateY(-50%);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            pointer-events:none;
+        }
+        .card-img .eng p{
+            margin:0;
+            font-family: "Roboto Serif", Georgia, serif;
+            font-weight:500;
+            font-size:28px;
+            line-height:1.4;
+            letter-spacing:-0.84px;
+            color:#fff;
+            text-align:center;
+        }
+
+        /* Desktop-mode card stacks image + text */
+        .card[data-variant="desktop"] .card-inner{
+            flex-direction:column;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 799px){
+            .dx{
+                padding:80px 16px;
+                gap:32px;
+            }
+            .dx-title .headline{
+                font-size:32px;
+                letter-spacing:-0.96px;
+            }
+            .quote-line p{
+                font-size:18px;
+                letter-spacing:-0.54px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<section class="dx" data-name="DX">
+
+    <!-- Title -->
+    <header class="dx-title" data-name="text">
+        <p class="kicker">SERVICE</p>
+        <p class="headline">INX의 서비스</p>
+    </header>
+
+    <!-- Blocks -->
+    <div class="service" data-name="서비스">
+
+        <!-- ===== Block 1 ===== -->
+        <section class="block" data-name="contents">
+            <div class="quote" data-name="text">
+                <div class="quote-line top" data-name="2단">
+            <span class="qicon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M6.2 3.3C4.2 4 3 5.6 3 7.8V13h5V7.8H5.9c.1-1.6.8-2.7 2.5-3.4L6.2 3.3ZM13.2 3.3c-2 .7-3.2 2.3-3.2 4.5V13h5V7.8h-2.1c.1-1.6.8-2.7 2.5-3.4l-2.2-1.1Z" fill="#fff"/></svg>
+            </span>
+                    <p>클라이언트가 기술은 있는데</p>
+                </div>
+
+                <div class="quote-line bottom" data-name="4단">
+                    <p>고객들에게 노출되는 서비스가 없을 때</p>
+                    <span class="qicon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M9.8 12.7c2-.7 3.2-2.3 3.2-4.5V3h-5v5.2h2.1c-.1 1.6-.8 2.7-2.5 3.4l2.2 1.1ZM2.8 12.7c2-.7 3.2-2.3 3.2-4.5V3H1v5.2h2.1c-.1 1.6-.8 2.7-2.5 3.4l2.2 1.1Z" fill="#fff"/></svg>
+            </span>
+                </div>
+            </div>
+
+            <div class="cards" data-name="제공서비스">
+                <!-- Desktop variant (image + text) -->
+                <div class="card" data-variant="desktop" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-img" data-name="img">
+                            <!-- TODO: 실제 이미지 경로로 교체 -->
+                            <img src="bd26dcd294929d9a629d657283f1ccc067a70ffc.png" alt="" />
+                            <div class="overlay-color"></div>
+                            <div class="overlay-dim"></div>
+                            <div class="eng" data-name="eng"><p>Journey Map</p></div>
+                        </div>
+                        <div class="card-text" data-name="text">
+                            <p class="title">제공서비스</p>
+                            <p class="desc">설명</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">고객 여정 설계</p>
+                            <p class="desc">고객이 우리 서비스를 어떻게 만나고 구매하는지 단계별 경험 지도</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">서비스 전략</p>
+                            <p class="desc">누구에게, 무엇을, 어떻게 팔 것인지 핵심 방향 수립</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">비즈니스 모델링</p>
+                            <p class="desc">수익 구조와 운영 방식을 지속가능하게 설계</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Block 2 ===== -->
+        <section class="block" data-name="contents">
+            <div class="quote" data-name="text">
+                <div class="quote-line top" data-name="2단">
+            <span class="qicon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M6.2 3.3C4.2 4 3 5.6 3 7.8V13h5V7.8H5.9c.1-1.6.8-2.7 2.5-3.4L6.2 3.3ZM13.2 3.3c-2 .7-3.2 2.3-3.2 4.5V13h5V7.8h-2.1c.1-1.6.8-2.7 2.5-3.4l-2.2-1.1Z" fill="#fff"/></svg>
+            </span>
+                    <p>서비스가 있기는 한데</p>
+                </div>
+                <div class="quote-line bottom" data-name="4단">
+                    <p>사용자가 어떻게 쓰는지 이해하지 못할 때</p>
+                    <span class="qicon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M9.8 12.7c2-.7 3.2-2.3 3.2-4.5V3h-5v5.2h2.1c-.1 1.6-.8 2.7-2.5 3.4l2.2 1.1ZM2.8 12.7c2-.7 3.2-2.3 3.2-4.5V3H1v5.2h2.1c-.1 1.6-.8 2.7-2.5 3.4l2.2 1.1Z" fill="#fff"/></svg>
+            </span>
+                </div>
+            </div>
+
+            <div class="cards" data-name="제공서비스">
+                <!-- Mobile-style components (text only) -->
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">UX 기획</p>
+                            <p class="desc">고객이 쉽고 편하게 쓰도록 경로 설계</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">UI 시스템 정의</p>
+                            <p class="desc">우리만의 통일된 디자인 규칙 만들기</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">프로토타이핑</p>
+                            <p class="desc">개발 전 미리 만들어보고 테스트</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">정책 만들기·정리</p>
+                            <p class="desc">서비스 운영에 필요한 약관·규정 정리</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Block 3 ===== -->
+        <section class="block" data-name="contents">
+            <div class="quote" data-name="text">
+                <div class="quote-line top" data-name="2단">
+            <span class="qicon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M6.2 3.3C4.2 4 3 5.6 3 7.8V13h5V7.8H5.9c.1-1.6.8-2.7 2.5-3.4L6.2 3.3ZM13.2 3.3c-2 .7-3.2 2.3-3.2 4.5V13h5V7.8h-2.1c.1-1.6.8-2.7 2.5-3.4l-2.2-1.1Z" fill="#fff"/></svg>
+            </span>
+                    <p>정부 지원 과제가 있는데</p>
+                </div>
+                <div class="quote-line bottom" data-name="4단">
+                    <p>자사 제품/기술로 무엇을 만들지 막막할 때</p>
+                    <span class="qicon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M9.8 12.7c2-.7 3.2-2.3 3.2-4.5V3h-5v5.2h2.1c-.1 1.6-.8 2.7-2.5 3.4l2.2 1.1ZM2.8 12.7c2-.7 3.2-2.3 3.2-4.5V3H1v5.2h2.1c-.1 1.6-.8 2.7-2.5 3.4l2.2 1.1Z" fill="#fff"/></svg>
+            </span>
+                </div>
+            </div>
+
+            <div class="cards" data-name="제공서비스">
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">지원사업 컨설팅</p>
+                            <p class="desc">과제 목표에 맞는 결과물 기획부터 보고서 작성까지 전 과정 지원</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">협력사·고객 네트워크 만들기</p>
+                            <p class="desc">기술을 활용할 파트너·고객 발굴하고<br>지속 가능한 협력 구조 만들기</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Block 4 ===== -->
+        <section class="block" data-name="contents">
+            <div class="quote" data-name="text">
+                <div class="quote-line top" data-name="2단">
+            <span class="qicon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M6.2 3.3C4.2 4 3 5.6 3 7.8V13h5V7.8H5.9c.1-1.6.8-2.7 2.5-3.4L6.2 3.3ZM13.2 3.3c-2 .7-3.2 2.3-3.2 4.5V13h5V7.8h-2.1c.1-1.6.8-2.7 2.5-3.4l-2.2-1.1Z" fill="#fff"/></svg>
+            </span>
+                    <p>현장 운영은 돌아가는데</p>
+                </div>
+                <div class="quote-line bottom" data-name="4단">
+                    <p>직원, 관리자에게 보이는 시스템이 없을 때</p>
+                    <span class="qicon" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none"><path d="M9.8 12.7c2-.7 3.2-2.3 3.2-4.5V3h-5v5.2h2.1c-.1 1.6-.8 2.7-2.5 3.4l2.2 1.1ZM2.8 12.7c2-.7 3.2-2.3 3.2-4.5V3H1v5.2h2.1c-.1 1.6-.8 2.7-2.5 3.4l2.2 1.1Z" fill="#fff"/></svg>
+            </span>
+                </div>
+            </div>
+
+            <div class="cards" data-name="제공서비스">
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">내부 관리 시스템</p>
+                            <p class="desc">업무 흐름을 디지털로 옮겨 실시간 확인·관리 가능하게</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">대시보드</p>
+                            <p class="desc">핵심 지표를 한눈에 보고 빠르게 의사결정할 수 있도록</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" data-name="제공서비스">
+                    <div class="card-inner">
+                        <div class="card-text">
+                            <p class="title">조직운영 도구 설계</p>
+                            <p class="desc">우리 회사 방식에 맞춘 직원 소통·협업 시스템 구축</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</section>
+</body>
+</html>

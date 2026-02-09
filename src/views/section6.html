@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Footer Responsive</title>
+
+    <style>
+        :root{
+            --bg:#111217;
+            --accent:#9763f0;
+            --lime:#c9ff7e;
+            --muted:#f0f3f6;
+            --dot:#9196a0;
+            --w:1280px;
+            --h:728px;
+            --dash: rgba(17,18,23,0.85);
+            --radius:2px;
+            --font: Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", Arial, sans-serif;
+        }
+        *{ box-sizing:border-box; }
+        body{ margin:0; background:#000; font-family:var(--font); }
+
+        a{ color:inherit; text-decoration:none; }
+        a:hover .openlink{ filter:brightness(1.05); }
+
+        /* ===== wrapper ===== */
+        .footer{
+            position:relative;
+            width:100%;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#000;
+            padding:24px;
+        }
+
+        /* ===== desktop artboard (>=1024px) ===== */
+        .section{
+            position:relative;
+            width:var(--w);
+            height:var(--h);
+            overflow:hidden;
+            background:var(--bg);
+            border-radius:12px;
+        }
+
+        .section__bg{
+            position:absolute;
+            inset:0;
+            pointer-events:none;
+            z-index:0;
+        }
+        .section__bg .base{ position:absolute; inset:0; background:var(--bg); }
+        .section__bg img{
+            position:absolute; inset:0;
+            width:100%; height:100%;
+            object-fit:cover;
+            mix-blend-mode:color-burn;
+        }
+
+        /* RIGHT: Infos (desktop) */
+        .infos{
+            position:absolute;
+            top:0; right:0;
+            width:526px;
+            height:728px;
+            z-index:2;
+            border-right:1px dashed var(--dash);
+        }
+
+        .infos__contact{
+            position:absolute;
+            left:0; top:0;
+            width:526px;
+            height:436px;
+            background:var(--accent);
+            overflow:hidden;
+        }
+
+        .info-info{
+            position:absolute;
+            left:44px; right:44px;
+            top:92px;
+            display:flex;
+            flex-direction:column;
+            gap:16px;
+            z-index:3;
+        }
+
+        .telfax{ display:flex; gap:16px; }
+        .tel, .fax{
+            flex:1 0 0;
+            padding-top:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .email{
+            width:438px;
+            height:66px;
+            padding-top:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+        .instagram{
+            width:100%;
+            padding-top:30px;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
+
+        .textbox{
+            height:36px;
+            width:100%;
+            border-radius:var(--radius);
+            display:flex;
+            align-items:center;
+            background:var(--accent);
+            position:relative;
+            overflow:hidden;
+        }
+        .textbox::after{
+            content:"";
+            position:absolute; inset:0;
+            border-radius:inherit;
+            pointer-events:none;
+            box-shadow: inset 4px 4px 4px rgba(0,0,0,0.25);
+        }
+
+        .textbox .pad{
+            padding:0 8px;
+            width:100%;
+            display:flex;
+            align-items:center;
+        }
+        .textbox p{
+            margin:0;
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:-0.54px;
+            color:#fff;
+            line-height:1.4;
+            white-space:nowrap;
+            overflow:hidden;
+            text-overflow:ellipsis;
+        }
+
+        .row-link{
+            display:flex;
+            gap:6px;
+            align-items:flex-start;
+            width:100%;
+        }
+
+        .openpage{
+            width:36px;
+            height:36px;
+            border-radius:var(--radius);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:0 8px;
+            flex:0 0 auto;
+            background:var(--accent);
+            position:relative;
+        }
+        .openpage::after{
+            content:"";
+            position:absolute; inset:0;
+            border-radius:inherit;
+            pointer-events:none;
+            box-shadow: inset 4px 4px 4px rgba(0,0,0,0.25);
+        }
+
+        .openlink{
+            width:24px;
+            height:24px;
+            border-radius:999px;
+            border:1px solid #fff;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            position:relative;
+            z-index:1;
+        }
+        .openlink svg{ width:11px; height:11px; display:block; }
+
+        /* paper background inside purple */
+        .paper{
+            position:absolute;
+            inset:-8px -8px 8px 8px; /* top right bottom left */
+            overflow:hidden;
+            z-index:1;
+            pointer-events:none;
+        }
+        .paper .subtract{
+            position:absolute;
+            left:0; top:0;
+            width:526px; height:436px;
+        }
+        .paper .subtract img{
+            position:absolute;
+            inset:0;
+            width:534px;
+            height:444px;
+            object-fit:cover;
+        }
+
+        /* captions */
+        .caption{
+            position:absolute;
+            display:flex;
+            gap:2px;
+            align-items:center;
+            z-index:4;
+            color:var(--muted);
+            font-size:16px;
+            letter-spacing:-0.32px;
+            pointer-events:none;
+        }
+        .caption .icon{
+            width:24px; height:24px;
+            position:relative;
+            overflow:hidden;
+            flex:0 0 auto;
+        }
+        .caption p{ margin:0; line-height:1.6; }
+
+        .caption.tel{ left:44px; top:92px; }
+        .caption.fax{ left:271px; top:92px; }
+        .caption.email{ left:44px; top:175px; }
+        .caption.ig{ left:44px; top:258px; }
+
+        /* Address block (desktop) */
+        .infos__address{
+            position:absolute;
+            left:0;
+            top:436px;
+            width:526px;
+            height:292px;
+            z-index:2;
+            border-top:1px dashed var(--dash);
+            background:transparent;
+        }
+        .add{
+            position:absolute;
+            left:47px;
+            right:44px;
+            top:48px;
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+        }
+        .add .caption-inline{
+            display:flex;
+            gap:2px;
+            align-items:center;
+            color:#fff;
+            font-size:16px;
+            letter-spacing:-0.32px;
+        }
+        .add .caption-inline .icon{ width:24px; height:24px; position:relative; overflow:hidden; }
+        .addr{ display:flex; flex-direction:column; gap:4px; color:#fff; }
+        .addr .kor{
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:-0.36px;
+            line-height:1.6;
+            margin:0;
+        }
+        .addr .eng{
+            display:flex;
+            flex-wrap:wrap;
+            gap:0 8px;
+            align-items:center;
+            margin:0;
+        }
+        .addr .eng span{
+            font-size:18px;
+            font-weight:700;
+            letter-spacing:-0.54px;
+            line-height:1.4;
+            color:#fff;
+            white-space:nowrap;
+        }
+        .addr .eng i{
+            width:4px; height:4px;
+            background:var(--dot);
+            display:inline-block;
+            flex:0 0 auto;
+            margin:0 2px;
+            align-self:center;
+        }
+
+        /* LEFT: Brand (desktop) */
+        .brand{
+            position:absolute;
+            left:0; top:0;
+            width:754px;
+            height:728px;
+            z-index:1;
+            border-left:1px dashed var(--dash);
+            border-right:1px dashed var(--dash);
+            overflow:hidden;
+        }
+        .mock{
+            position:absolute;
+            left:89px;
+            bottom:-0.33px;
+            width:586px;
+            height:618px;
+            -webkit-mask-image: url("./assets/mask.png");
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 585.861px 642.033px;
+            -webkit-mask-position: 0.512px -0.333px;
+            mask-image: url("./assets/mask.png");
+            mask-repeat: no-repeat;
+            mask-size: 585.861px 642.033px;
+            mask-position: 0.512px -0.333px;
+        }
+        .mock img{
+            position:absolute; inset:0;
+            width:100%; height:100%;
+            object-fit:cover;
+            pointer-events:none;
+        }
+
+        .brandmsg{
+            position:absolute;
+            left:19px;
+            top:92px;
+            width:182px;
+            height:93px;
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            z-index:3;
+        }
+        .msgline{ width:100%; display:flex; align-items:center; }
+        .msgline .leftpad{
+            width:100%;
+            display:flex;
+            align-items:center;
+            padding-left:12px;
+            gap:0;
+        }
+        .badge{
+            width:12px;
+            height:23px;
+            border-radius:2px;
+            background:var(--lime);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#111217;
+            font-size:16px;
+            line-height:1.6;
+            box-shadow: inset 1px 1px 4px rgba(17,18,23,0.5);
+            flex:0 0 auto;
+        }
+        .badge.n{ box-shadow: inset 1px 4px 4px rgba(17,18,23,0.5); }
+        .badge.x{ box-shadow: inset 1px 1px 2px rgba(17,18,23,0.5); }
+
+        .word{
+            height:23px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:2px;
+            padding:0 2px;
+            color:#fff;
+            font-size:16px;
+            line-height:1.6;
+            letter-spacing:-0.32px;
+            white-space:nowrap;
+        }
+        .word.single{ width:12px; padding:0; }
+
+        /* ===== mobile layout (<1024px): stack, fluid, no fixed 1280x728 ===== */
+        @media (max-width: 1023px){
+            .footer{ padding:0; min-height:auto; }
+            .section{
+                width:100%;
+                height:auto;
+                border-radius:0;
+                overflow:hidden;
+            }
+
+            /* make it column flow */
+            .brand, .infos{
+                position:relative;
+                width:100%;
+                height:auto;
+                border:0;
+            }
+
+            /* Brand becomes top block */
+            .brand{
+                padding:24px 18px;
+                border-bottom:1px dashed var(--dash);
+            }
+            .mock{
+                position:relative;
+                left:auto;
+                bottom:auto;
+                width:100%;
+                height:280px;
+                margin-top:16px;
+                -webkit-mask-image: none;
+                mask-image: none;
+                border-radius:12px;
+                overflow:hidden;
+                background:rgba(255,255,255,0.06);
+            }
+            .mock img{ width:100%; height:100%; object-fit:cover; }
+
+            .brandmsg{
+                position:relative;
+                left:auto; top:auto;
+                width:100%;
+                height:auto;
+                padding:6px 0 0;
+            }
+            .msgline .leftpad{ padding-left:0; }
+
+            /* Infos becomes bottom block */
+            .infos{
+                border:0;
+            }
+            .infos__contact{
+                position:relative;
+                width:100%;
+                height:auto;
+                background:transparent;
+                padding:24px 18px 16px;
+            }
+
+            /* Use section bg for contact area too (like the React version) */
+            .infos__contact::before{
+                content:"";
+                position:absolute;
+                inset:0;
+                background:var(--bg);
+                z-index:0;
+            }
+            .infos__contact::after{
+                content:"";
+                position:absolute;
+                inset:0;
+                background:var(--bg);
+                opacity:0.0;
+                z-index:0;
+            }
+
+            .paper{ display:none; } /* 모바일은 깔끔하게 */
+            .caption{ position:static; pointer-events:auto; margin-top:14px; }
+            .caption.tel, .caption.fax, .caption.email, .caption.ig{ left:auto; top:auto; }
+
+            .info-info{
+                position:relative;
+                left:auto; right:auto; top:auto;
+                z-index:2;
+                gap:14px;
+            }
+
+            .telfax{ flex-direction:column; gap:14px; }
+            .tel, .fax{ padding-top:0; }
+            .email{ width:100%; height:auto; padding-top:0; }
+            .instagram{ padding-top:0; }
+
+            .textbox{ background:var(--accent); }
+            .textbox p{ font-size:16px; }
+
+            .infos__address{
+                position:relative;
+                top:auto;
+                width:100%;
+                height:auto;
+                border-top:1px dashed var(--dash);
+                padding:18px 18px 28px;
+            }
+            .add{
+                position:relative;
+                left:auto; right:auto; top:auto;
+                gap:10px;
+            }
+            .addr .kor{ font-size:16px; }
+            .addr .eng span{ font-size:14px; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="footer">
+    <section class="section" aria-label="Footer Section">
+
+        <!-- Background -->
+        <div class="section__bg" aria-hidden="true">
+            <div class="base"></div>
+            <!-- TODO: 배경 이미지 경로 -->
+            <img src="./assets/bg-noise.png" alt="" />
+        </div>
+
+        <!-- LEFT: BRAND -->
+        <section class="brand" aria-label="Brand">
+            <div class="mock" aria-hidden="true">
+                <!-- TODO: mockup 이미지 경로 -->
+                <img src="./assets/mockup.png" alt="" />
+            </div>
+
+            <div class="brandmsg" aria-label="Brand message">
+                <div class="msgline">
+                    <div class="leftpad">
+                        <div class="badge">I</div>
+                        <div class="word">nsight driven</div>
+                    </div>
+                </div>
+                <div class="msgline">
+                    <div class="leftpad">
+                        <div class="badge n">N</div>
+                        <div class="word">avigated by emphathy</div>
+                    </div>
+                </div>
+                <div class="msgline">
+                    <div class="word single">e</div>
+                    <div class="badge x">X</div>
+                    <div class="word">perience shaped</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT: INFOS -->
+        <aside class="infos" aria-label="Infos">
+            <div class="infos__contact" aria-label="INX-Info-Contact">
+
+                <!-- mobile captions (desktop에서도 표시되지만 paper 위로 안 보이게 하려면 paper가 덮음) -->
+                <div class="caption tel">
+            <span class="icon">
+              <!-- Tel icon placeholder -->
+              <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden="true">
+                <path d="M0 0H20V20H0Z" fill="#fff"></path>
+              </svg>
+            </span>
+                    <p>Tel.</p>
+                </div>
+
+                <div class="caption fax">
+            <span class="icon">
+              <!-- Fax icon placeholder -->
+              <svg viewBox="0 0 20 20" width="24" height="24" aria-hidden="true">
+                <path d="M0 0H20V20H0Z" fill="#DADDE1"></path>
+              </svg>
+            </span>
+                    <p>Fax</p>
+                </div>
+
+                <div class="caption email">
+            <span class="icon">
+              <!-- Email icon placeholder -->
+              <svg viewBox="0 0 18 14" width="24" height="24" aria-hidden="true">
+                <path d="M0 0H18V14H0Z" fill="none" stroke="#DADDE1"></path>
+              </svg>
+            </span>
+                    <p>Email</p>
+                </div>
+
+                <div class="caption ig">
+            <span class="icon">
+              <!-- Instagram icon placeholder -->
+              <svg viewBox="0 0 18 18" width="24" height="24" aria-hidden="true">
+                <path d="M0 0H18V18H0Z" fill="#DADDE1"></path>
+              </svg>
+            </span>
+                    <p>Instagram</p>
+                </div>
+
+                <!-- content list -->
+                <div class="info-info">
+                    <div class="telfax">
+                        <div class="tel">
+                            <div class="textbox"><div class="pad"><p>02-6223-6003</p></div></div>
+                        </div>
+                        <div class="fax">
+                            <div class="textbox"><div class="pad"><p>02-6223-6004</p></div></div>
+                        </div>
+                    </div>
+
+                    <div class="email">
+                        <div class="row-link">
+                            <div class="textbox" style="flex:1 0 0;"><div class="pad"><p>inx@i-nx.com</p></div></div>
+                            <a class="openpage" href="mailto:inx@i-nx.com" aria-label="Open email">
+                                <div class="openlink" aria-hidden="true">
+                                    <!-- OpenLink icon placeholder -->
+                                    <svg viewBox="0 0 10.9287 10.9082" fill="none" aria-hidden="true">
+                                        <path d="M0 0H10V10H0Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="instagram">
+                        <div class="row-link">
+                            <div class="textbox" style="flex:1 0 0;"><div class="pad"><p>@inx_design_consulting</p></div></div>
+                            <a class="openpage" href="https://www.instagram.com/inx_design_consulting/" target="_blank" rel="noreferrer" aria-label="Open instagram">
+                                <div class="openlink" aria-hidden="true">
+                                    <svg viewBox="0 0 10.9287 10.9082" fill="none" aria-hidden="true">
+                                        <path d="M0 0H10V10H0Z" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- desktop only paper overlay -->
+                <div class="paper" aria-hidden="true">
+                    <div class="subtract">
+                        <!-- TODO: paper 이미지 경로 -->
+                        <img src="./assets/paper.png" alt="" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address panel -->
+            <div class="infos__address" aria-label="INX-Info-Add">
+                <div class="add">
+                    <div class="caption-inline">
+              <span class="icon">
+                <!-- Address icon placeholder -->
+                <svg viewBox="0 0 16 19" width="24" height="24" aria-hidden="true">
+                  <path d="M0 0H16V19H0Z" fill="#DADDE1"></path>
+                </svg>
+              </span>
+                        <span>Address</span>
+                    </div>
+
+                    <div class="addr">
+                        <p class="kor">07237 서울특별시 영등포구 여의나루로 53-1,<br/>대오빌딩 505호</p>
+                        <p class="eng" aria-label="English address">
+                            <span>505 Daeo Building</span><i></i>
+                            <span>53-1 Yeouinaru-ro</span><i></i>
+                            <span>Yeongdeungpo-gu, Seoul</span><i></i>
+                            <span>Republic of Korea</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </section>
+</div>
+</body>
+</html>
