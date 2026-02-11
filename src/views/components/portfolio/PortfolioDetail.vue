@@ -20,9 +20,6 @@
 
         <!-- 데이터 -->
         <template v-else-if="detail">
-          <pre class="text-[12px] p-2 bg-yellow-100">
-          loading={{ loading }} / error={{ error }} / detail={{ !!detail }} / fileNo={{ detail?.fileNo }}
-          </pre>
           <div class="w-full md:w-[342px] flex flex-col gap-[20px]">
             <ProjectTitle :title="detail.fileName" :subtitle="detail.fileOriginName || ''" />
             <ProjectMeta :meta="metaRows" />
@@ -158,7 +155,6 @@ const ProjectTitle = defineComponent({
   },
   template: `
     <div class="flex flex-col gap-[8px]">
-    <div class="text-xs text-gray-400">fileNo: {{ detail.fileNo }}</div>
     <p class="font-bold text-[32px] tracking-[-0.96px] text-[#111217]">
       {{ title }}
     </p>

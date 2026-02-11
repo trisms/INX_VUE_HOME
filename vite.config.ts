@@ -26,6 +26,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      vue: "vue/dist/vue.esm-bundler.js", // ✅ 추가 (runtime compiler 포함)
     },
   },
 });
