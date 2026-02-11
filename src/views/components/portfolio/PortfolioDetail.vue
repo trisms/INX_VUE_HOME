@@ -29,7 +29,7 @@
           </div>
 
           <!-- ✅ fileNo로 이미지 호출 -->
-          <ProjectImages :file-no="detail.fileNo" :subs="subs" />
+          <ProjectImages :fileNo="detail.fileNo" :subs="subs" />
         </template>
 
         <!-- detail이 null인데 loading도 아닌 경우 -->
@@ -158,6 +158,7 @@ const ProjectTitle = defineComponent({
   },
   template: `
     <div class="flex flex-col gap-[8px]">
+    <div class="text-xs text-gray-400">fileNo: {{ detail.fileNo }}</div>
     <p class="font-bold text-[32px] tracking-[-0.96px] text-[#111217]">
       {{ title }}
     </p>
@@ -216,10 +217,8 @@ const ProjectImages = defineComponent({
 
     // ✅ 서브: 4칸 고정으로 맞춤
     const subSlots = computed(() => {
-      const arr = (props.subs || []).slice(0, 4);
-      // 길이 4로 패딩
-      while (arr.length < 4) arr.push(null as any);
-      return arr;
+      const base = (props.subs ?? []).slice(0, 4);
+      return Array.from({ length: 4 }, (_, i) => base[i] ?? null);
     });
 
 
