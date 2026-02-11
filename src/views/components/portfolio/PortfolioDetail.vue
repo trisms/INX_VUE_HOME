@@ -45,7 +45,12 @@
 import { computed, defineComponent, onMounted, PropType, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { http } from "@/lib/http";
+const API_BASE_RAW =
+    (import.meta.env.VITE_API_BASE_URL as string | undefined) || window.location.origin;
 
+const apiUrl = (path: string) => {
+  return new URL(path, API_BASE_RAW).toString();
+};
 
 type SubImage = {
   subFileNo: number;
