@@ -20,6 +20,9 @@
 
         <!-- 데이터 -->
         <template v-else-if="detail">
+          <pre class="text-[12px] p-2 bg-yellow-100">
+          loading={{ loading }} / error={{ error }} / detail={{ !!detail }} / fileNo={{ detail?.fileNo }}
+          </pre>
           <div class="w-full md:w-[342px] flex flex-col gap-[20px]">
             <ProjectTitle :title="detail.fileName" :subtitle="detail.fileOriginName || ''" />
             <ProjectMeta :meta="metaRows" />
@@ -100,15 +103,19 @@ const metaRows = computed<MetaRow[]>(() => {
 });
 
 async function loadDetail() {
-  if (!Number.isFinite(fileNo.value)) return;
-
   loading.value = true;
   error.value = null;
   detail.value = null;
   subs.value = [];
 
+  if (!Number.isFinite(fileNo.value)) {
+    error.value = "잘못된 접근입니다. (파일 번호가 없습니다)";
+    loading.value = false;
+    return;
+  }
+
   try {
-    const { data } = await http.get<ApiDetailResponse>(`${API_BASE}/api/portfolio/detail`, {
+    const { data } = await http.get<ApiDetailResponse>(apiUrl("/api/portfolio/detail"), {
       params: { fileNo: fileNo.value },
     });
 
@@ -117,13 +124,14 @@ async function loadDetail() {
     }
 
     detail.value = data.file;
-    subs.value = Array.isArray(data.subs) ? data.subs.slice(0, 4) : []; // ✅ 최대 4개
+    subs.value = Array.isArray(data.subs) ? data.subs.slice(0, 4) : [];
   } catch (e: any) {
     error.value = e?.message ?? "상세 정보를 불러오지 못했어요.";
   } finally {
     loading.value = false;
   }
 }
+
 
 
 onMounted(() => {
