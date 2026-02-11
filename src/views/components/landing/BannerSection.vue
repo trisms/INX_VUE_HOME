@@ -3,7 +3,7 @@
     <div class="display" data-name="Display">
       <div class="display-inner">
         <div class="headline-wrap" data-name="텍스트">
-          <h2 class="headline">
+          <h2 class="headline font-bold">
             대표님,<br />
             이런 <span>고민</span>을 겪고 계시진 않았나요?
           </h2>
@@ -46,14 +46,12 @@
           </p>
 
           <div class="btn-row">
-            <button class="btn-inquiry" type="button">
+            <button class="btn-inquiry" type="button" @click="goInquiry">
               <span>바로 문의하기</span>
             </button>
-
             <a
                 class="btn-brochure"
-                href="https://drive.google.com/file/d/1Jk8R5wGMRRW-ULxiNFJRVSC0A9w3roIL/view?usp=sharing"
-                target="_blank"
+                href="https://drive.google.com/uc?export=download&id=1Jk8R5wGMRRW-ULxiNFJRVSC0A9w3roIL"
                 rel="noreferrer"
             >
               <span class="inner">
@@ -77,12 +75,12 @@
             <div class="track" :style="{ '--dur': `${duration}s` }">
               <!-- 1번 세트 -->
               <div class="item" v-for="(t, i) in testimonials" :key="`a-${i}`">
-                <p class="txt">“{{ t }}”</p>
+                <p class="txt font-['Pretendard:Bold',sans-serif]">“{{ t }}”</p>
               </div>
 
               <!-- 2번 세트(복제): 끊김 없이 무한 롤링용 -->
               <div class="item" v-for="(t, i) in testimonials" :key="`b-${i}`" aria-hidden="true">
-                <p class="txt">“{{ t }}”</p>
+                <p class="txt font-['Pretendard:Bold',sans-serif]">“{{ t }}”</p>
               </div>
             </div>
           </div>
@@ -141,6 +139,19 @@ function replay() {
     })
   })
 }
+
+function goInquiry() {
+  // 1) 홈 섹션 id로 찾기
+  const el = document.querySelector("#footer") as HTMLElement | null;
+  if (!el) return;
+
+  // 2) Tailwind scroll-mt가 먹게: WithUs에 scroll-mt-[72px] 이미 붙여둔 전제
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // 3) (선택) 주소창 해시도 맞추고 싶으면
+  history.replaceState(null, "", "#footer");
+}
+
 
 onMounted(() => {
   // Intersection

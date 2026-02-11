@@ -32,7 +32,7 @@
 
             <button
                 class="nav-item"
-                :class="{ 'is-active': active === 'contact' }"
+                :class="{ 'is-active': active === 'footer' }"
                 @click="goContact"
             >
               문의하기
@@ -46,12 +46,10 @@
                 aria-hidden="true"
             />
           </nav>
-
           <!-- CTA : 회사소개서 -->
           <a
               class="brochure"
-              :href="brochureHref"
-              target="_blank"
+              href="https://drive.google.com/uc?export=download&id=1Jk8R5wGMRRW-ULxiNFJRVSC0A9w3roIL"
               rel="noreferrer"
               aria-label="회사소개서 다운로드"
           >
@@ -99,6 +97,15 @@ const underlineStyle = computed(() => ({
   width: `${underlineWidth.value}px`,
 }));
 
+
+function scrollToHash(hash: string) {
+  const el = document.querySelector(hash) as HTMLElement | null;
+  if (!el) return;
+
+  // ✅ Tailwind의 scroll-mt-[72px]가 있으면 헤더 높이 보정은 자동으로 됨
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function setUnderline() {
   if (!navRef.value) return;
 
@@ -136,38 +143,35 @@ function goTo(hash: string, key: ActiveKey) {
 
 
 /** ✅ 홈으로 이동 후 특정 섹션으로 스크롤 */
-async function pushHomeAndScroll(hash: string, key: ActiveKey) {
-  // 홈이 아니면 홈으로 이동
+async function pushHomeAndScroll(hash: string) {
+  // ✅ 홈이 아니면 홈으로 + hash까지 같이 push
   if (route.path !== "/") {
-    await router.push("/"); // ✅ name 대신 path로 안전 이동
+    await router.push({ path: "/", hash });
     await nextTick();
-    // DOM이 완전히 안정화되도록 한 번 더 양보
-    setTimeout(() => goTo(hash, key), 0);
+    // DOM 렌더 한 박자 후 스크롤
+    requestAnimationFrame(() => scrollToHash(hash));
   } else {
-    goTo(hash, key);
+    // 홈이면 바로 스크롤
+    scrollToHash(hash);
+    // (원하면 주소창 해시도 맞춰주기)
+    history.replaceState(null, "", hash);
   }
 }
 
 async function goPortfolio() {
   active.value = "portfolio";
-/*  requestAnimationFrame(setUnderline);*/
+  // 포트폴리오가 "홈 섹션"이면 이걸로:
+  // await pushHomeAndScroll("#portfolio");
 
-  // 홈이면 섹션으로
-/*  if (route.path === "/") {
-    goTo("#portfolio", "portfolio");
-    return;
-  }*/
-
-  // 홈이 아니면 포트폴리오 페이지로
-  await router.push("/portfolioList"); // ✅ name 대신 path
+  // 포트폴리오가 별도 페이지면 이대로:
+  await router.push("/portfolioList");
 }
 
 async function goContact() {
   active.value = "contact";
   requestAnimationFrame(setUnderline);
 
-  // contact는 홈 섹션이니까: 홈으로 이동 후 스크롤
-  await pushHomeAndScroll("#contact", "contact");
+  await pushHomeAndScroll("#footer");
 }
 
 function onResize() {
@@ -210,7 +214,7 @@ onBeforeUnmount(() => {
   left: 0;
   bottom: -12px;
   height: 2px;
-  background: rgba(17, 18, 23, 0.92);
+  /*background: rgba(17, 18, 23, 0.92);*/
   border-radius: 999px;
   transition: transform 220ms ease, width 220ms ease;
 }

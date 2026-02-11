@@ -25,7 +25,7 @@
           <li class="nav-item"><a class="nav-link" href="#about" data-click="scroll-to-target">프로젝트</a></li>
           <li class="nav-item"><a class="nav-link" href="#team" data-click="scroll-to-target">문의하기</a></li>
           <li class="nav-item dropdown">
-            <a class="nav-link active" href="#home" data-click="scroll-to-target" data-scroll-target="#home">회사소개서 <i class="fa fa-download"></i>
+            <a class="nav-link active"  href="https://drive.google.com/uc?export=download&id=1Jk8R5wGMRRW-ULxiNFJRVSC0A9w3roIL" data-click="scroll-to-target" data-scroll-target="#home">회사소개서 <i class="fa fa-download"></i>
 
             </a>
           </li>

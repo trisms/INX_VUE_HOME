@@ -26,7 +26,7 @@
           </div>
 
           <!-- ✅ fileNo로 이미지 호출 -->
-          <ProjectImages :file-no="detail.fileNo" />
+          <ProjectImages :file-no="detail.fileNo" :subs="subs" />
         </template>
 
         <!-- detail이 null인데 loading도 아닌 경우 -->
@@ -43,6 +43,13 @@ import { computed, defineComponent, onMounted, PropType, ref, watch } from "vue"
 import { useRoute } from "vue-router";
 import { http } from "@/lib/http";
 
+
+type SubImage = {
+  subFileNo: number;
+};
+
+
+const subs = ref<SubImage[]>([]);
 const API_BASE = import.meta.env.VITE_API_BASE_URL as string; // http://localhost:8080/api
 
 type MetaRow = { k: string; v: string };
@@ -59,6 +66,7 @@ type FileDetail = {
 type ApiDetailResponse = {
   result: string;
   file: FileDetail;
+  subs?: SubImage[]; // ✅ 추가
 };
 
 const route = useRoute();
@@ -97,9 +105,10 @@ async function loadDetail() {
   loading.value = true;
   error.value = null;
   detail.value = null;
+  subs.value = [];
 
   try {
-    const { data } = await http.get<ApiDetailResponse>("http://210.126.2.153:8080/api/portfolio/detail", {
+    const { data } = await http.get<ApiDetailResponse>(`${API_BASE}/api/portfolio/detail`, {
       params: { fileNo: fileNo.value },
     });
 
@@ -108,12 +117,14 @@ async function loadDetail() {
     }
 
     detail.value = data.file;
+    subs.value = Array.isArray(data.subs) ? data.subs.slice(0, 4) : []; // ✅ 최대 4개
   } catch (e: any) {
     error.value = e?.message ?? "상세 정보를 불러오지 못했어요.";
   } finally {
     loading.value = false;
   }
 }
+
 
 onMounted(loadDetail);
 watch(fileNo, () => loadDetail());
@@ -174,65 +185,104 @@ const ProjectImages = defineComponent({
   components: { Frame },
   props: {
     fileNo: { type: Number, required: true },
+    subs: { type: Array as PropType<{ subFileNo: number }[]>, default: () => [] }, // ✅ 추가
   },
   setup(props) {
     const imgFailed = ref(false);
-    //const heroImg = computed(() => `${API_BASE}/image/${props.fileNo}`);
-    const heroImg = computed(() => `http://210.126.2.153:8080/api/image/${props.fileNo}`);
 
-    function onImgError() {
+    // ✅ 메인
+    const heroImg = computed(() => `${API_BASE}/api/image/${props.fileNo}`);
+
+    console.log(props.fileNo)
+    console.log(props.subs)
+
+    // ✅ 서브: 4칸 고정으로 맞춤
+    const subSlots = computed(() => {
+      const arr = (props.subs || []).slice(0, 4);
+      // 길이 4로 패딩
+      while (arr.length < 4) arr.push(null as any);
+      return arr;
+    });
+
+
+    // ✅ 서브 URL
+    const subUrl = (subFileNo: number) =>
+        `${API_BASE}/api/sub/image/${encodeURIComponent(String(subFileNo))}`;
+    function onHeroError() {
       imgFailed.value = true;
     }
 
-    return { heroImg, imgFailed, onImgError };
+    return { heroImg, imgFailed, onHeroError, subSlots, subUrl };
   },
   template: `
     <div class="w-full md:flex-1 flex flex-col gap-[8px]" data-name="imgs">
 
     <!-- ✅ 모바일: < md -->
     <div class="flex flex-col gap-[8px] md:hidden">
+      <!-- HERO -->
       <div class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden">
-        <img v-if="!imgFailed" :src="heroImg" class="absolute inset-0 w-full h-full object-cover" alt="" @error="onImgError" />
+        <img v-if="!imgFailed" :src="heroImg" class="absolute inset-0 w-full h-full object-cover" alt="" @error="onHeroError" />
         <Frame v-else class="absolute inset-0" />
       </div>
 
-      <Frame class="w-full aspect-[818/460]" />
-      <Frame class="w-full aspect-[818/460]" />
-      <Frame class="w-full aspect-[818/460]" />
-      <Frame class="w-full aspect-[818/460]" />
+      <!-- SUB 4 -->
+      <div v-for="(s, i) in subSlots" :key="i"
+           class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden">
+        <img v-if="s && s.subFileNo"
+             :src="subUrl(s.subFileNo)"
+             class="absolute inset-0 w-full h-full object-cover"
+             alt=""
+             @error="$event.target.style.display='none'" />
+        <Frame class="absolute inset-0" />
+      </div>
     </div>
 
     <!-- ✅ 테블릿: md ~ < lg -->
     <div class="hidden md:flex lg:hidden flex-col gap-[8px] w-full">
+      <!-- HERO -->
       <div class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden">
-        <img v-if="!imgFailed" :src="heroImg" class="absolute inset-0 w-full h-full object-cover" alt="" @error="onImgError" />
+        <img v-if="!imgFailed" :src="heroImg" class="absolute inset-0 w-full h-full object-cover" alt="" @error="onHeroError" />
         <Frame v-else class="absolute inset-0" />
       </div>
 
+      <!-- SUB 4 (2x2) -->
       <div class="grid grid-cols-2 gap-[8px] w-full">
-        <Frame class="aspect-[818/460]" />
-        <Frame class="aspect-[818/460]" />
-        <Frame class="aspect-[818/460]" />
-        <Frame class="aspect-[818/460]" />
+        <div v-for="(s, i) in subSlots" :key="i"
+             class="relative bg-[#f0f3f6] aspect-[818/460] rounded-[12px] overflow-hidden">
+          <img v-if="s && s.subFileNo"
+               :src="subUrl(s.subFileNo)"
+               class="absolute inset-0 w-full h-full object-cover"
+               alt=""
+               @error="$event.target.style.display='none'" />
+          <Frame class="absolute inset-0" />
+        </div>
       </div>
     </div>
 
     <!-- ✅ 데스크탑: >= lg -->
     <div class="hidden lg:flex lg:flex-col lg:gap-[8px]">
+      <!-- HERO -->
       <div class="relative bg-[#f0f3f6] h-[460px] w-[818px] rounded-[12px] overflow-hidden">
-        <img v-if="!imgFailed" :src="heroImg" class="absolute inset-0 w-full h-full object-cover" alt="" @error="onImgError" />
+        <img v-if="!imgFailed" :src="heroImg" class="absolute inset-0 w-full h-full object-cover" alt="" @error="onHeroError" />
         <Frame v-else class="absolute inset-0" />
       </div>
 
+      <!-- SUB 4 (2x2) -->
       <div class="grid grid-cols-2 gap-[8px] w-full">
-        <Frame class="aspect-[818/460]" />
-        <Frame class="aspect-[818/460]" />
-        <Frame class="aspect-[818/460]" />
-        <Frame class="aspect-[818/460]" />
+        <div v-for="(s, i) in subSlots" :key="i"
+             class="relative bg-[#f0f3f6] aspect-[818/460] rounded-[12px] overflow-hidden">
+          <img v-if="s && s.subFileNo"
+               :src="subUrl(s.subFileNo)"
+               class="absolute inset-0 w-full h-full object-cover"
+               alt=""
+               @error="$event.target.style.display='none'" />
+          <Frame class="absolute inset-0" />
+        </div>
       </div>
     </div>
 
     </div>
   `,
 });
+
 </script>

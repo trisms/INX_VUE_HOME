@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer" aria-label="Footer">
+  <footer class="footer" id="footer" v-bind="$attrs" aria-label="Footer">
     <section class="section" aria-label="Footer Section">
       <!-- Background -->
       <div class="section__bg" aria-hidden="true">
@@ -131,7 +131,7 @@
           <div class="add">
             <div class="caption-inline">
               <span class="icon" aria-hidden="true">
-                <i class="fa fa-address"></i>
+                 <img src="@/assets/img/inx/Add.png">
               </span>
               <span>Address</span>
             </div>

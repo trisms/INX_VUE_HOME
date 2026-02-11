@@ -4,7 +4,11 @@
       <!-- ===== Header ===== -->
       <div class="border-b border-[#dadde1] pb-[40px] text-center">
         <p class="text-[#9763f0] text-[18px] tracking-[-0.54px]">PORTFOLIO</p>
-        <p class="text-[#111217] text-[40px] tracking-[-1.2px]">INX의 포트폴리오</p>
+        <p class="flex items-center justify-center gap-[8px]
+         text-[#111217] text-[40px] tracking-[-1.2px] font-bold">
+          INX의 포트폴리오
+          <img src="@/assets/img/inx/icon/IconSize.png" class="w-[40px] h-[44px]" />
+        </p>
 
         <!-- ===== Tags ===== -->
         <div class="max-w-[1280px] relative shrink-0 w-full" data-name="tags">
@@ -18,8 +22,6 @@
                   :key="cat"
                   type="button"
                   class="tag-btn"
-                  :class="{ 'is-active': selectedCats.has(cat) }"
-                  @click="toggleCat(cat)"
               >
                 <span class="tag-text">{{ cat }}</span>
               </button>
@@ -246,7 +248,7 @@ function toImg(f: PortfolioFile): string {
   const id = f.fileNo;
   if (!id) return "";
   //return `${API_BASE}/image/${id}`;
-  return `http://210.126.2.153:8080/api/image/${id}`;
+  return `${API_BASE}/api/image/${id}`;
 }
 function toVariant(f: PortfolioFile): Variant {
   // 파일명 기반으로 wide/tall 정하고 싶으면 여기서 규칙 추가 가능
@@ -269,7 +271,7 @@ async function loadProjects() {
   loading.value = true;
   error.value = null;
   try {
-    const { data } = await http.get<ApiListResponse>("http://210.126.2.153:8080/api/portfolio/list");
+    const { data } = await http.get<ApiListResponse>(`${API_BASE}/api/portfolio/list`);
     const rows = Array.isArray(data?.list) ? data.list : [];
 
     // 필요하면 enabled/dataStatus 필터 여기서
@@ -422,9 +424,9 @@ watch(filteredProjects, () => {
 <style scoped>
 /* ===== Tag buttons ===== */
 .tag-btn{
-  border: 1px solid #dadde1;
   background: #fff;
   color:#353841;
+  cursor: default;
   border-radius: 999px;
   padding: 6px 12px;
   line-height: 1;
@@ -433,12 +435,6 @@ watch(filteredProjects, () => {
   justify-content:center;
   user-select:none;
   transition: background .18s ease, border-color .18s ease, color .18s ease;
-}
-.tag-btn:hover{ border-color:#b9c0c9; }
-.tag-btn.is-active{
-  background: #e5e8ff;
-  border-color: #2f6bff;
-  color: #2f2f7a;
 }
 .tag-btn--ghost{ border-style:dashed; }
 .tag-text{
