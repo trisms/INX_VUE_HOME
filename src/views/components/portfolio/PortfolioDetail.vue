@@ -126,7 +126,12 @@ async function loadDetail() {
 }
 
 
-onMounted(loadDetail);
+onMounted(() => {
+  console.log("API_BASE =", API_BASE);
+  console.log("route.params.id =", route.params.id);
+  console.log("fileNo =", fileNo.value);
+  loadDetail();
+});
 watch(fileNo, () => loadDetail());
 
 /* ================= 내부 컴포넌트들 (너가 준 방식 그대로 유지) ================= */
