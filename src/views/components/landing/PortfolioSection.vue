@@ -5,7 +5,10 @@
       <div class="border-b border-[#dadde1] pb-[40px] text-center">
         <p class="text-[#9763f0] text-[18px] tracking-[-0.54px]">PORTFOLIO</p>
         <p class="flex items-center justify-center gap-[8px]
-         text-[#111217] text-[40px] tracking-[-1.2px] font-bold">
+         text-[#111217]  text-[26px]
+         sm:text-[32px]
+         lg:text-[40px]
+          tracking-[-1.2px] font-bold">
           INX의 포트폴리오
           <img src="@/assets/img/inx/icon/IconSize.png" class="w-[40px] h-[44px]" />
         </p>

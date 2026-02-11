@@ -21,7 +21,7 @@
         <!-- 데이터 -->
         <template v-else-if="detail">
           <div class="w-full md:w-[342px] flex flex-col gap-[20px]">
-            <ProjectTitle :title="detail.fileName" :subtitle="detail.fileOriginName || ''" />
+            <ProjectTitle :title="detail.fileName" :subtitle="detail.subTitle || ''" />
             <ProjectMeta :meta="metaRows" />
           </div>
 
@@ -60,9 +60,15 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL as string; // http://localhos
 type MetaRow = { k: string; v: string };
 
 type FileDetail = {
-  fileNo: number;
+  ileNo: number;
   fileName: string;
   fileOriginName: string;
+
+  year: string;        // ✅ 추가
+  customer: string;    // ✅ 추가
+  industry: string;    // ✅ 추가
+  subTitle: string;    // ✅ 추가
+
   insertDate?: string | null;
   categoryType?: string | number | null; // 1~4
   // 있으면 더 추가 가능
@@ -94,15 +100,22 @@ function toScope(ct?: string | number | null) {
   }
 }
 
+function toDate(d?: string | null) {
+  if (!d) return "-";
+  return d.split("T")[0]; // 2026-02-11 형태
+}
+
 const metaRows = computed<MetaRow[]>(() => {
   if (!detail.value) return [];
   return [
-    { k: "Year:", v: toYear(detail.value.insertDate) },
-    { k: "고객사:", v: "-" }, // 필드 생기면 연결
+    { k: "Year:", v: detail.value.year || "-" },
+    { k: "고객사:", v: detail.value.customer || "-" },
     { k: "Scope of Work:", v: toScope(detail.value.categoryType) },
-    { k: "Industry:", v: "-" }, // 필드 생기면 연결
+    { k: "Industry:", v: detail.value.industry || "-" },
+    { k: "등록일:", v: toDate(detail.value.insertDate) },
   ];
 });
+
 
 async function loadDetail() {
   loading.value = true;
@@ -125,7 +138,12 @@ async function loadDetail() {
       throw new Error("상세 데이터를 찾지 못했어요.");
     }
 
-    detail.value = data.file;
+    detail.value = {
+      ...data.file,
+      subTitle: (data.file as any).subTitle ?? (data.file as any).sub_title ?? "",
+      insertDate: (data.file as any).insertDate ?? (data.file as any).insert_date ?? null,
+      fileOriginName: (data.file as any).fileOriginName ?? (data.file as any).file_origin_name ?? "",
+    };
     subs.value = Array.isArray(data.subs) ? data.subs.slice(0, 4) : [];
   } catch (e: any) {
     error.value = e?.message ?? "상세 정보를 불러오지 못했어요.";
@@ -137,9 +155,6 @@ async function loadDetail() {
 
 
 onMounted(() => {
-  console.log("API_BASE =", API_BASE);
-  console.log("route.params.id =", route.params.id);
-  console.log("fileNo =", fileNo.value);
   loadDetail();
 });
 watch(fileNo, () => loadDetail());
@@ -155,7 +170,7 @@ const ProjectTitle = defineComponent({
   },
   template: `
     <div class="flex flex-col gap-[8px]">
-    <p class="font-bold text-[32px] tracking-[-0.96px] text-[#111217]">
+    <p class="font-bold text-[30px] tracking-[-0.96px] text-[#111217]">
       {{ title }}
     </p>
     <p class="text-[18px] text-[#353841] tracking-[-0.36px]">

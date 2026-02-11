@@ -260,6 +260,11 @@ onBeforeUnmount(() => {
 @media (min-width:768px){
   .grid > *:nth-child(4n) .cellBorder{ border-right:0; }
 }
+@media (max-width:438px){
+  .title{
+    font-size:28px;
+  }
+}
 
 /* ✅ 마지막 행 bottom 제거: 이제 “항상 마지막 행이 꽉 차게 패딩”되므로 정확히 동작 */
 .grid > *:nth-last-child(-n + 2) .cellBorder{ border-bottom:0; }
