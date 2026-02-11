@@ -112,7 +112,7 @@ const metaRows = computed<MetaRow[]>(() => {
     { k: "고객사:", v: detail.value.customer || "-" },
     { k: "Scope of Work:", v: toScope(detail.value.categoryType) },
     { k: "Industry:", v: detail.value.industry || "-" },
-    { k: "등록일:", v: toDate(detail.value.insertDate) },
+    /*{ k: "등록일:", v: toDate(detail.value.insertDate) },*/
   ];
 });
 

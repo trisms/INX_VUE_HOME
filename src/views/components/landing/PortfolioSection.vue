@@ -10,7 +10,7 @@
          lg:text-[40px]
           tracking-[-1.2px] font-bold">
           INX의 포트폴리오
-          <img src="@/assets/img/inx/icon/IconSize.png" class="w-[40px] h-[44px]" />
+          <a href="/portfolioList"><img src="@/assets/img/inx/icon/IconSize.png" class="w-[40px] h-[44px]" /></a>
         </p>
 
         <!-- ===== Tags ===== -->
