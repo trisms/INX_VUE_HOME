@@ -32,7 +32,7 @@
 
             <button
                 class="nav-item"
-                :class="{ 'is-active': active === 'footer' }"
+                :class="{ 'is-active': active === 'contact' }"
                 @click="goContact"
             >
               문의하기
@@ -167,13 +167,44 @@ async function goPortfolio() {
   await router.push("/portfolioList");
 }
 
-async function goContact() {
+function goContact() {
   active.value = "contact";
   requestAnimationFrame(setUnderline);
 
-  await pushHomeAndScroll("#footer");
+  const el = document.querySelector("#footer") as HTMLElement | null;
+  if (!el) return;
+
+  // 헤더 높이 보정해서 window 스크롤
+  const headerOffset = window.innerWidth < 640 ? 64 : 72;
+  const y = window.scrollY + el.getBoundingClientRect().top - headerOffset;
+
+  window.scrollTo({ top: y, behavior: "smooth" });
+
+  // ✅ 현재 경로 유지 + #footer만 붙이기
+  history.replaceState(null, "", `${location.pathname}${location.search}#footer`);
 }
 
+function scrollToId(id: string) {
+  const el = document.querySelector(id) as HTMLElement | null;
+  if (!el) return;
+
+  const scroller = document.querySelector("main") as HTMLElement | null;
+  const headerOffset = window.innerWidth < 640 ? 64 : 72;
+
+  // main 스크롤이면 main 기준으로 스크롤
+  if (scroller) {
+    const top =
+        el.getBoundingClientRect().top -
+        scroller.getBoundingClientRect().top +
+        scroller.scrollTop -
+        headerOffset;
+
+    scroller.scrollTo({ top, behavior: "smooth" });
+  } else {
+    // window 스크롤이면 window 기준
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
 function onResize() {
   setUnderline();
 }

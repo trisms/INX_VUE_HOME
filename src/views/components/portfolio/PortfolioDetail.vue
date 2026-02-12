@@ -4,92 +4,87 @@
       style="margin-top: 30px"
       data-name="Projects"
   >
-    <section class="bg-white w-full max-w-[375px] md:max-w-[900px] lg:max-w-[1224px] rounded-[20px]">
-      <div
-          class="flex flex-col gap-[36px] px-[18px] py-[32px]
-               md:flex-row md:gap-[16px]
-               lg:px-[24px] lg:py-[60px]"
-      >
-        <!-- 로딩/에러 -->
-        <p v-if="loading" class="w-full text-center text-[#747985] text-[14px]">
-          불러오는 중...
-        </p>
-        <p v-else-if="error" class="w-full text-center text-red-500 text-[14px]">
-          {{ error }}
-        </p>
+    <!-- 로딩/에러 -->
+    <p v-if="loading" class="w-full text-center text-[#747985] text-[14px]">
+      불러오는 중...
+    </p>
+    <p v-else-if="error" class="w-full text-center text-red-500 text-[14px]">
+      {{ error }}
+    </p>
 
-        <!-- 데이터 -->
-        <template v-else-if="detail">
+    <!-- 리스트 -->
+    <template v-else>
+      <section
+          v-for="item in items"
+          :key="item.fileNo"
+          class="bg-white w-full max-w-[375px] md:max-w-[900px] lg:max-w-[1224px] rounded-[20px]"
+      >
+        <div
+            class="flex flex-col gap-[36px] px-[18px] py-[32px]
+                 md:flex-row md:gap-[16px]
+                 lg:px-[24px] lg:py-[60px]"
+        >
           <div class="w-full md:w-[342px] flex flex-col gap-[20px]">
-            <ProjectTitle :title="detail.fileName" :subtitle="detail.subTitle || ''" />
-            <ProjectMeta :meta="metaRows" />
+            <ProjectTitle :title="item.fileName" :subtitle="item.subTitle || ''" />
+            <ProjectMeta :meta="makeMetaRows(item)" />
           </div>
 
-          <!-- ✅ fileNo로 이미지 호출 -->
-          <ProjectImages :fileNo="detail.fileNo" :subs="subs" />
-        </template>
+          <ProjectImages :fileNo="item.fileNo" :subs="item.subs ?? []" />
+        </div>
+      </section>
 
-        <!-- detail이 null인데 loading도 아닌 경우 -->
-        <p v-else class="w-full text-center text-[#747985] text-[14px]">
-          데이터가 없습니다.
-        </p>
-      </div>
-    </section>
+      <p v-if="items.length === 0" class="w-full text-center text-[#747985] text-[14px]">
+        데이터가 없습니다.
+      </p>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, onMounted, PropType, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { computed, defineComponent, onMounted, PropType, ref } from "vue";
 import { http } from "@/lib/http";
+
+/** ================== API BASE ================== */
 const API_BASE_RAW =
     (import.meta.env.VITE_API_BASE_URL as string | undefined) || window.location.origin;
 
-const apiUrl = (path: string) => {
-  return new URL(path, API_BASE_RAW).toString();
-};
+const apiUrl = (path: string) => new URL(path, API_BASE_RAW).toString();
 
-type SubImage = {
+// 이미지 서버 베이스
+const API_BASE = import.meta.env.VITE_API_BASE_URL as string;
+
+/** ================== Types ================== */
+type SubDto = {
   subFileNo: number;
+  fileNo: number;
+  imageUrl?: string; // "/api/sub/image/{subFileNo}"
 };
-
-
-const subs = ref<SubImage[]>([]);
-const API_BASE = import.meta.env.VITE_API_BASE_URL as string; // http://localhost:8080/api
 
 type MetaRow = { k: string; v: string };
 
-type FileDetail = {
-  ileNo: number;
+type PortfolioItem = {
+  fileNo: number;
   fileName: string;
-  fileOriginName: string;
-
-  year: string;        // ✅ 추가
-  customer: string;    // ✅ 추가
-  industry: string;    // ✅ 추가
-  subTitle: string;    // ✅ 추가
-
-  insertDate?: string | null;
-  categoryType?: string | number | null; // 1~4
-  // 있으면 더 추가 가능
+  subTitle?: string;
+  year?: string;
+  customer?: string;
+  industry?: string;
+  categoryType?: string | number | null;
+  imageUrl?: string;     // "/api/image/{fileNo}"
+  subs?: SubDto[];
 };
 
-type ApiDetailResponse = {
+type ApiListResponse = {
   result: string;
-  file: FileDetail;
-  subs?: SubImage[]; // ✅ 추가
+  list: PortfolioItem[];
 };
 
-const route = useRoute();
-const fileNo = computed(() => Number(route.params.id));
-
+/** ================== State ================== */
 const loading = ref(false);
 const error = ref<string | null>(null);
-const detail = ref<FileDetail | null>(null);
+const items = ref<PortfolioItem[]>([]);
 
-function toYear(d?: string | null) {
-  return d?.slice(0, 4) || "-";
-}
+/** ================== Helpers ================== */
 function toScope(ct?: string | number | null) {
   switch (String(ct ?? "")) {
     case "1": return "UXUI 디자인";
@@ -100,66 +95,55 @@ function toScope(ct?: string | number | null) {
   }
 }
 
-function toDate(d?: string | null) {
-  if (!d) return "-";
-  return d.split("T")[0]; // 2026-02-11 형태
+function makeMetaRows(d: PortfolioItem): MetaRow[] {
+  return [
+    { k: "Year:", v: d.year || "-" },
+    { k: "고객사:", v: d.customer || "-" },
+    { k: "Scope of Work:", v: toScope(d.categoryType) },
+    { k: "Industry:", v: d.industry || "-" },
+  ];
 }
 
-const metaRows = computed<MetaRow[]>(() => {
-  if (!detail.value) return [];
-  return [
-    { k: "Year:", v: detail.value.year || "-" },
-    { k: "고객사:", v: detail.value.customer || "-" },
-    { k: "Scope of Work:", v: toScope(detail.value.categoryType) },
-    { k: "Industry:", v: detail.value.industry || "-" },
-    /*{ k: "등록일:", v: toDate(detail.value.insertDate) },*/
-  ];
-});
-
-
-async function loadDetail() {
+/** ================== Load ================== */
+async function loadList() {
   loading.value = true;
   error.value = null;
-  detail.value = null;
-  subs.value = [];
-
-  if (!Number.isFinite(fileNo.value)) {
-    error.value = "잘못된 접근입니다. (파일 번호가 없습니다)";
-    loading.value = false;
-    return;
-  }
+  items.value = [];
 
   try {
-    const { data } = await http.get<ApiDetailResponse>(apiUrl("/api/portfolio/detail"), {
-      params: { fileNo: fileNo.value },
+    const { data } = await http.get<ApiListResponse>(apiUrl("/api/portfolio/list"), {
+      params: {
+        // categoryType: 2,
+        // limit: 50,
+      },
     });
 
-    if (String(data?.result) !== "200" || !data?.file) {
-      throw new Error("상세 데이터를 찾지 못했어요.");
+    if (String(data?.result) !== "200" || !Array.isArray(data.list)) {
+      throw new Error("목록 데이터를 찾지 못했어요.");
     }
 
-    detail.value = {
-      ...data.file,
-      subTitle: (data.file as any).subTitle ?? (data.file as any).sub_title ?? "",
-      insertDate: (data.file as any).insertDate ?? (data.file as any).insert_date ?? null,
-      fileOriginName: (data.file as any).fileOriginName ?? (data.file as any).file_origin_name ?? "",
-    };
-    subs.value = Array.isArray(data.subs) ? data.subs.slice(0, 4) : [];
+    // ✅ 지금 서버 응답 형태 그대로 정규화
+    items.value = data.list.map((it: any) => ({
+      fileNo: Number(it.fileNo),
+      fileName: String(it.fileName ?? ""),
+      subTitle: it.subTitle ?? "",
+      year: it.year ?? "",
+      customer: it.customer ?? "",
+      industry: it.industry ?? "",
+      categoryType: it.categoryType ?? null,
+      imageUrl: it.imageUrl ?? undefined,
+      subs: Array.isArray(it.subs) ? it.subs.slice(0, 4) : [],
+    }));
   } catch (e: any) {
-    error.value = e?.message ?? "상세 정보를 불러오지 못했어요.";
+    error.value = e?.message ?? "목록 정보를 불러오지 못했어요.";
   } finally {
     loading.value = false;
   }
 }
 
+onMounted(loadList);
 
-
-onMounted(() => {
-  loadDetail();
-});
-watch(fileNo, () => loadDetail());
-
-/* ================= 내부 컴포넌트들 (너가 준 방식 그대로 유지) ================= */
+/* ================= 내부 컴포넌트들 ================= */
 
 /* 타이틀 */
 const ProjectTitle = defineComponent({
@@ -209,79 +193,92 @@ const Frame = defineComponent({
   `,
 });
 
-/* 이미지 영역: 기존 3단 레이아웃 유지 + HERO만 API로 */
+/* 이미지 영역 (오류 방지 버전) */
 const ProjectImages = defineComponent({
   name: "ProjectImages",
   components: { Frame },
   props: {
     fileNo: { type: Number, required: true },
-    subs: { type: Array as PropType<{ subFileNo: number }[]>, default: () => [] }, // ✅ 추가
+    subs: { type: Array as PropType<SubDto[]>, default: () => [] },
   },
   setup(props) {
-    const imgFailed = ref(false);
+    const heroFailed = ref(false);
+    const failedSubs = ref<Record<number, true>>({});
 
-    // ✅ 메인
     const heroImg = computed(() => `${API_BASE}/api/image/${props.fileNo}`);
 
-    console.log(props.fileNo)
-    console.log(props.subs)
-
-    // ✅ 서브: 4칸 고정으로 맞춤
     const subSlots = computed(() => {
       const base = (props.subs ?? []).slice(0, 4);
       return Array.from({ length: 4 }, (_, i) => base[i] ?? null);
     });
 
+    const subUrl = (s: SubDto) =>
+        s.imageUrl ? s.imageUrl : `${API_BASE}/api/sub/image/${encodeURIComponent(String(s.subFileNo))}`;
 
-    // ✅ 서브 URL
-    const subUrl = (subFileNo: number) =>
-        `${API_BASE}/api/sub/image/${encodeURIComponent(String(subFileNo))}`;
     function onHeroError() {
-      imgFailed.value = true;
+      heroFailed.value = true;
+    }
+    function onSubError(subFileNo: number) {
+      failedSubs.value[subFileNo] = true;
+    }
+    function subOk(s: SubDto | null) {
+      return !!(s && s.subFileNo && !failedSubs.value[s.subFileNo]);
     }
 
-    return { heroImg, imgFailed, onHeroError, subSlots, subUrl };
+    return { heroImg, heroFailed, onHeroError, subSlots, subUrl, onSubError, subOk };
   },
   template: `
     <div class="w-full md:flex-1 flex flex-col gap-[8px]" data-name="imgs">
 
     <!-- ✅ 모바일: < md -->
     <div class="flex flex-col gap-[8px] md:hidden">
-      <!-- HERO -->
       <div class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden">
-        <img v-if="!imgFailed" :src="heroImg" class="absolute inset-0 w-full h-full object-cover" alt="" @error="onHeroError" />
+        <img
+            v-if="!heroFailed"
+            :src="heroImg"
+            class="absolute inset-0 w-full h-full object-cover"
+            alt=""
+            @error="onHeroError"
+        />
         <Frame v-else class="absolute inset-0" />
       </div>
 
-      <!-- SUB 4 -->
       <div v-for="(s, i) in subSlots" :key="i"
            class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden">
-        <img v-if="s && s.subFileNo"
-             :src="subUrl(s.subFileNo)"
-             class="absolute inset-0 w-full h-full object-cover"
-             alt=""
-             @error="$event.target.style.display='none'" />
+        <img
+            v-if="subOk(s)"
+            :src="subUrl(s)"
+            class="absolute inset-0 w-full h-full object-cover"
+            alt=""
+            @error="onSubError(s.subFileNo)"
+        />
         <Frame class="absolute inset-0" />
       </div>
     </div>
 
     <!-- ✅ 테블릿: md ~ < lg -->
     <div class="hidden md:flex lg:hidden flex-col gap-[8px] w-full">
-      <!-- HERO -->
       <div class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden">
-        <img v-if="!imgFailed" :src="heroImg" class="absolute inset-0 w-full h-full object-cover" alt="" @error="onHeroError" />
+        <img
+            v-if="!heroFailed"
+            :src="heroImg"
+            class="absolute inset-0 w-full h-full object-cover"
+            alt=""
+            @error="onHeroError"
+        />
         <Frame v-else class="absolute inset-0" />
       </div>
 
-      <!-- SUB 4 (2x2) -->
       <div class="grid grid-cols-2 gap-[8px] w-full">
         <div v-for="(s, i) in subSlots" :key="i"
              class="relative bg-[#f0f3f6] aspect-[818/460] rounded-[12px] overflow-hidden">
-          <img v-if="s && s.subFileNo"
-               :src="subUrl(s.subFileNo)"
-               class="absolute inset-0 w-full h-full object-cover"
-               alt=""
-               @error="$event.target.style.display='none'" />
+          <img
+              v-if="subOk(s)"
+              :src="subUrl(s)"
+              class="absolute inset-0 w-full h-full object-cover"
+              alt=""
+              @error="onSubError(s.subFileNo)"
+          />
           <Frame class="absolute inset-0" />
         </div>
       </div>
@@ -289,21 +286,27 @@ const ProjectImages = defineComponent({
 
     <!-- ✅ 데스크탑: >= lg -->
     <div class="hidden lg:flex lg:flex-col lg:gap-[8px]">
-      <!-- HERO -->
       <div class="relative bg-[#f0f3f6] h-[460px] w-[818px] rounded-[12px] overflow-hidden">
-        <img v-if="!imgFailed" :src="heroImg" class="absolute inset-0 w-full h-full object-cover" alt="" @error="onHeroError" />
+        <img
+            v-if="!heroFailed"
+            :src="heroImg"
+            class="absolute inset-0 w-full h-full object-cover"
+            alt=""
+            @error="onHeroError"
+        />
         <Frame v-else class="absolute inset-0" />
       </div>
 
-      <!-- SUB 4 (2x2) -->
       <div class="grid grid-cols-2 gap-[8px] w-full">
         <div v-for="(s, i) in subSlots" :key="i"
              class="relative bg-[#f0f3f6] aspect-[818/460] rounded-[12px] overflow-hidden">
-          <img v-if="s && s.subFileNo"
-               :src="subUrl(s.subFileNo)"
-               class="absolute inset-0 w-full h-full object-cover"
-               alt=""
-               @error="$event.target.style.display='none'" />
+          <img
+              v-if="subOk(s)"
+              :src="subUrl(s)"
+              class="absolute inset-0 w-full h-full object-cover"
+              alt=""
+              @error="onSubError(s.subFileNo)"
+          />
           <Frame class="absolute inset-0" />
         </div>
       </div>
@@ -312,5 +315,4 @@ const ProjectImages = defineComponent({
     </div>
   `,
 });
-
 </script>

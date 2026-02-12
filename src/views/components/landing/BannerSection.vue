@@ -141,16 +141,15 @@ function replay() {
 }
 
 function goInquiry() {
-  // 1) 홈 섹션 id로 찾기
   const el = document.querySelector("#footer") as HTMLElement | null;
   if (!el) return;
 
-  // 2) Tailwind scroll-mt가 먹게: WithUs에 scroll-mt-[72px] 이미 붙여둔 전제
   el.scrollIntoView({ behavior: "smooth", block: "start" });
 
-  // 3) (선택) 주소창 해시도 맞추고 싶으면
-  history.replaceState(null, "", "#footer");
+  // ✅ 현재 경로 유지 + 해시만 교체
+  history.replaceState(null, "", `${location.pathname}${location.search}#footer`);
 }
+
 
 
 onMounted(() => {

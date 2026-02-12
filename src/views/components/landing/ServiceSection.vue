@@ -8,7 +8,7 @@
         <!-- Header Text -->
         <div class="text-center">
           <p class="text-[#9763f0]  text-[18px] tracking-[-0.54px]">SERVICE</p>
-          <p class=" text-[40px] tracking-[-1.2px] font-bold">INX의 서비스</p>
+          <p class=" text-[25pt] sm:text-[25pt] lg:text-[40px] tracking-[-1.2px] font-bold">INX의 서비스</p>
         </div>
 
         <!-- Content Blocks -->

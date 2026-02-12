@@ -8,7 +8,7 @@
     <!-- Title -->
     <header class="w-full flex flex-col items-center gap-[8px] font-['Pretendard:Bold',sans-serif] leading-[1.4]">
       <p class="text-[#9763f0] font-bold text-[18px] tracking-[-0.54px]">ABOUT</p>
-      <p class="text-[#111217] text-[40px] tracking-[-1.2px] font-bold text-center">Design Your Tomorrow</p>
+      <p class="text-[#111217] text-[25pt] sm:text-[25pt] lg:text-[40px] tracking-[-1.2px] font-bold text-center">Design Your Tomorrow</p>
     </header>
 
     <!-- Cards -->

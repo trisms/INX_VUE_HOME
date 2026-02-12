@@ -3,7 +3,7 @@
     <!-- Title -->
     <div class="text" data-name="text">
       <p class="kicker">CLIENTS</p>
-      <p class="title">INX와 함께한 클라이언트</p>
+      <p class="title text-[25pt] sm:text-[25pt] lg:text-[40px]">INX와 함께한 클라이언트</p>
     </div>
 
     <!-- Grid -->
@@ -191,7 +191,6 @@ onBeforeUnmount(() => {
 }
 .title{
   color:#111217;
-  font-size:40px;
   font-weight:700;
   letter-spacing:-1.2px;
   text-align:center;
@@ -236,7 +235,6 @@ onBeforeUnmount(() => {
   padding: 16px 24px;
   box-sizing:border-box;
 }
-
 .img{
   width:100%;
   height:100%;
@@ -259,11 +257,6 @@ onBeforeUnmount(() => {
 /* 데스크탑(4열): 4번째 열 right 제거 */
 @media (min-width:768px){
   .grid > *:nth-child(4n) .cellBorder{ border-right:0; }
-}
-@media (max-width:438px){
-  .title{
-    font-size:28px;
-  }
 }
 
 /* ✅ 마지막 행 bottom 제거: 이제 “항상 마지막 행이 꽉 차게 패딩”되므로 정확히 동작 */
