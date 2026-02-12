@@ -111,7 +111,7 @@ async function loadList() {
   items.value = [];
 
   try {
-    const { data } = await http.get<ApiListResponse>(apiUrl("/api/portfolio/list"), {
+    const { data } = await http.get<ApiListResponse>(apiUrl("/api/portfolio/detail"), {
       params: {
         // categoryType: 2,
         // limit: 50,
@@ -183,11 +183,9 @@ const ProjectMeta = defineComponent({
 /* 프레임 */
 const Frame = defineComponent({
   name: "Frame",
-  props: {
-    class: { type: String, default: "" },
-  },
+  props: { class: { type: String, default: "" } },
   template: `
-    <div :class="['bg-[#f0f3f6] rounded-[12px] relative overflow-hidden', $props.class]">
+    <div :class="['rounded-[12px] relative overflow-hidden', $props.class]">
     <div class="absolute inset-0 border border-[#f0f3f6] rounded-[12px] pointer-events-none"></div>
     </div>
   `,
@@ -202,18 +200,28 @@ const ProjectImages = defineComponent({
     subs: { type: Array as PropType<SubDto[]>, default: () => [] },
   },
   setup(props) {
+    console.log("ProjectImages setup", props.fileNo, props.subs);
+
     const heroFailed = ref(false);
     const failedSubs = ref<Record<number, true>>({});
 
-    const heroImg = computed(() => `${API_BASE}/api/image/${props.fileNo}`);
+    // ✅ VITE_API_BASE_URL이 .../api 로 끝나도 안전하게 ORIGIN만 추출
+    const ORIGIN = (import.meta.env.VITE_API_BASE_URL as string).replace(/\/api\/?$/, "");
+
+    const heroImg = computed(() => `${ORIGIN}/api/image/${props.fileNo}`);
 
     const subSlots = computed(() => {
       const base = (props.subs ?? []).slice(0, 4);
       return Array.from({ length: 4 }, (_, i) => base[i] ?? null);
     });
-
-    const subUrl = (s: SubDto) =>
-        s.imageUrl ? s.imageUrl : `${API_BASE}/api/sub/image/${encodeURIComponent(String(s.subFileNo))}`;
+    const subUrl = (s: SubDto) => {
+      // 서버가 "/api/sub/image/23"을 주면 ORIGIN 붙여서 절대경로로
+      if (s.imageUrl) {
+        if (/^https?:\/\//i.test(s.imageUrl)) return s.imageUrl;
+        return `${ORIGIN}${s.imageUrl}`;
+      }
+      return `${ORIGIN}/api/sub/image/${encodeURIComponent(String(s.subFileNo))}`;
+    };
 
     function onHeroError() {
       heroFailed.value = true;
@@ -222,97 +230,114 @@ const ProjectImages = defineComponent({
       failedSubs.value[subFileNo] = true;
     }
     function subOk(s: SubDto | null) {
-      return !!(s && s.subFileNo && !failedSubs.value[s.subFileNo]);
+      return !!(s && s.subFileNo) && !failedSubs.value[s.subFileNo];
     }
 
     return { heroImg, heroFailed, onHeroError, subSlots, subUrl, onSubError, subOk };
   },
+
   template: `
     <div class="w-full md:flex-1 flex flex-col gap-[8px]" data-name="imgs">
 
     <!-- ✅ 모바일: < md -->
     <div class="flex flex-col gap-[8px] md:hidden">
+      <!-- HERO -->
       <div class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden">
         <img
             v-if="!heroFailed"
             :src="heroImg"
-            class="absolute inset-0 w-full h-full object-cover"
+            class="absolute inset-0 w-full h-full object-cover z-[2]"
             alt=""
             @error="onHeroError"
         />
         <Frame v-else class="absolute inset-0" />
       </div>
 
-      <div v-for="(s, i) in subSlots" :key="i"
-           class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden">
+      <!-- SUB 4 -->
+      <div
+          v-for="(s, i) in subSlots"
+          :key="i"
+          class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden"
+      >
+        <Frame class="absolute inset-0 z-[1]" />
         <img
             v-if="subOk(s)"
             :src="subUrl(s)"
-            class="absolute inset-0 w-full h-full object-cover"
+            class="absolute inset-0 w-full h-full object-cover z-[2]"
             alt=""
             @error="onSubError(s.subFileNo)"
         />
-        <Frame class="absolute inset-0" />
       </div>
     </div>
 
     <!-- ✅ 테블릿: md ~ < lg -->
     <div class="hidden md:flex lg:hidden flex-col gap-[8px] w-full">
+      <!-- HERO -->
       <div class="relative bg-[#f0f3f6] w-full aspect-[818/460] rounded-[12px] overflow-hidden">
         <img
             v-if="!heroFailed"
             :src="heroImg"
-            class="absolute inset-0 w-full h-full object-cover"
+            class="absolute inset-0 w-full h-full object-cover z-[2]"
             alt=""
             @error="onHeroError"
         />
         <Frame v-else class="absolute inset-0" />
       </div>
 
+      <!-- SUB 4 (2x2) -->
       <div class="grid grid-cols-2 gap-[8px] w-full">
-        <div v-for="(s, i) in subSlots" :key="i"
-             class="relative bg-[#f0f3f6] aspect-[818/460] rounded-[12px] overflow-hidden">
+        <div
+            v-for="(s, i) in subSlots"
+            :key="i"
+            class="relative bg-[#f0f3f6] aspect-[818/460] rounded-[12px] overflow-hidden"
+        >
+          <Frame class="absolute inset-0 z-[1]" />
           <img
               v-if="subOk(s)"
               :src="subUrl(s)"
-              class="absolute inset-0 w-full h-full object-cover"
+              class="absolute inset-0 w-full h-full object-cover z-[2]"
               alt=""
               @error="onSubError(s.subFileNo)"
           />
-          <Frame class="absolute inset-0" />
         </div>
       </div>
     </div>
 
     <!-- ✅ 데스크탑: >= lg -->
     <div class="hidden lg:flex lg:flex-col lg:gap-[8px]">
+      <!-- HERO -->
       <div class="relative bg-[#f0f3f6] h-[460px] w-[818px] rounded-[12px] overflow-hidden">
         <img
             v-if="!heroFailed"
             :src="heroImg"
-            class="absolute inset-0 w-full h-full object-cover"
+            class="absolute inset-0 w-full h-full object-cover z-[2]"
             alt=""
             @error="onHeroError"
         />
         <Frame v-else class="absolute inset-0" />
       </div>
 
+      <!-- SUB 4 (2x2) -->
       <div class="grid grid-cols-2 gap-[8px] w-full">
-        <div v-for="(s, i) in subSlots" :key="i"
-             class="relative bg-[#f0f3f6] aspect-[818/460] rounded-[12px] overflow-hidden">
+        <div
+            v-for="(s, i) in subSlots"
+            :key="i"
+            class="relative bg-[#f0f3f6] aspect-[818/460] rounded-[12px] overflow-hidden"
+        >
+          <Frame class="absolute inset-0 z-[1]" />
           <img
               v-if="subOk(s)"
               :src="subUrl(s)"
-              class="absolute inset-0 w-full h-full object-cover"
+              class="absolute inset-0 w-full h-full object-cover z-[2]"
               alt=""
               @error="onSubError(s.subFileNo)"
           />
-          <Frame class="absolute inset-0" />
         </div>
       </div>
     </div>
 
     </div>
-  `,
+  `
+
 });
 </script>
