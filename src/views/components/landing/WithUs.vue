@@ -271,4 +271,5 @@ onBeforeUnmount(() => {
 @media (min-width:768px){
   .grid > *:nth-last-child(-n + 4) .cellBorder{ border-bottom:0; }
 }
+
 </style>

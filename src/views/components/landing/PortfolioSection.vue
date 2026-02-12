@@ -5,8 +5,8 @@
       <div class="border-b border-[#dadde1] pb-[40px] text-center">
         <p class="text-[#9763f0] text-[18px] tracking-[-0.54px]">PORTFOLIO</p>
         <p class="flex items-center justify-center gap-[8px]
-         text-[#111217]  text-[26px]
-         sm:text-[32px]
+         text-[#111217]  text-[25pt]
+         sm:text-[25pt]
          lg:text-[40px]
           tracking-[-1.2px] font-bold">
           INX의 포트폴리오
@@ -549,4 +549,5 @@ watch(filteredProjects, () => {
   .proj-card--wide{ width: 230px; }
   .proj-card--tall{ width: 210px; }
 }
+
 </style>

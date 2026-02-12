@@ -23,18 +23,18 @@
         <div class="w-full p-[8px] flex flex-col md:flex-row lg:flex-row gap-[16px] items-stretch lg:items-center">
           <div class="flex-1 min-w-0">
             <div class="pl-[8px] lg:pl-[12px] pt-[16px] lg:pt-0 flex flex-col gap-[12px]">
-              <p class="text-[#9763f0] text-[18px] sm:text-[20px] tracking-[-0.6px] font-['Pretendard:Bold',sans-serif]">
+              <p class="text-[#9763f0] text-[18px] sm:text-[20px] font-bold tracking-[-0.6px] font-['Pretendard:Bold',sans-serif]">
                 1. We are
               </p>
 
               <div class="text-[#111217] flex flex-col gap-[6px]">
-                <p class="text-[20px] sm:text-[24px] tracking-[-0.72px] font-['Pretendard:Bold',sans-serif] leading-[1.4]">
+                <p class="text-[20px] sm:text-[24px] tracking-[-0.72px] font-bold font-['Pretendard:Bold',sans-serif] leading-[1.4]">
                   고객사를 <br class="hidden lg:block" />
                   제대로 이해하는 팀
                 </p>
 
                 <p
-                    class="text-[16px] sm:text-[18px] tracking-[-0.36px] leading-[1.6] font-['Pretendard:Regular',sans-serif]"
+                    class="text-[16px] sm:text-[18px] tracking-[-0.36px]  leading-[1.6] font-['Pretendard:Regular',sans-serif]"
                     style="font-feature-settings:'lnum','tnum'"
                 >
                   고객사의 상황을 깊이 파악하고,<br class="hidden lg:block" />
@@ -62,12 +62,12 @@
         <div class="w-full p-[8px] flex flex-col md:flex-row lg:flex-row gap-[16px] items-stretch lg:items-center">
           <div class="flex-1 min-w-0">
             <div class="pl-[8px] lg:pl-[12px] pt-[16px] lg:pt-0 flex flex-col gap-[12px]">
-              <p class="text-[#9763f0] text-[18px] sm:text-[20px] tracking-[-0.6px] font-['Pretendard:Bold',sans-serif]">
+              <p class="text-[#9763f0] text-[18px] sm:text-[20px] font-bold tracking-[-0.6px] font-['Pretendard:Bold',sans-serif]">
                 2. How
               </p>
 
               <div class="text-[#111217] flex flex-col gap-[6px]">
-                <p class="text-[20px] sm:text-[24px] tracking-[-0.72px] font-['Pretendard:Bold',sans-serif] leading-[1.4]">
+                <p class="text-[20px] sm:text-[24px] tracking-[-0.72px] font-bold font-['Pretendard:Bold',sans-serif] leading-[1.4]">
                   기획부터 실행까지 <br class="hidden lg:block" />
                   책임지는 전문가
                 </p>
@@ -101,12 +101,12 @@
         <div class="w-full p-[8px] flex flex-col md:flex-row lg:flex-row gap-[16px] items-stretch lg:items-center">
           <div class="flex-1 min-w-0">
             <div class="pl-[8px] lg:pl-[12px] pt-[16px] lg:pt-0 flex flex-col gap-[12px]">
-              <p class="text-[#9763f0] text-[18px] sm:text-[20px] tracking-[-0.6px] font-['Pretendard:Bold',sans-serif]">
+              <p class="text-[#9763f0] text-[18px] sm:text-[20px] tracking-[-0.6px] font-bold font-['Pretendard:Bold',sans-serif]">
                 3. Why us
               </p>
 
               <div class="text-[#111217] flex flex-col gap-[6px]">
-                <p class="text-[20px] sm:text-[24px] tracking-[-0.72px] font-['Pretendard:Bold',sans-serif] leading-[1.4]">
+                <p class="text-[20px] sm:text-[24px] tracking-[-0.72px] font-bold font-['Pretendard:Bold',sans-serif] leading-[1.4]">
                   예쁘기만 한 디자인을 <br class="hidden lg:block" />
                   만들지 않습니다.
                 </p>
@@ -234,4 +234,5 @@ onBeforeUnmount(() => {
     animation: none;
   }
 }
+
 </style>

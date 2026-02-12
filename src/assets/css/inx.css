@@ -11,6 +11,8 @@ html, body, #app {
     "Noto Sans KR",
     Arial,
     sans-serif;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 :root{
     --ink:#111217;
@@ -1018,7 +1020,12 @@ a:hover .openlink{ filter:brightness(1.05); }
         .reviews{ width:100%; }
     }
     @media (max-width: 799px){
-
+        .cta-title{
+            margin:0;
+            font-size:22pt;
+            line-height:1.4;
+            letter-spacing:-0.96px;
+        }
         .graphic-img {
             max-width: 70%;
         }
@@ -1107,10 +1114,6 @@ a:hover .openlink{ filter:brightness(1.05); }
             padding: 56px 16px;
             min-height: 588px;
         }
-        .headline{
-            font-size: 32px;
-            letter-spacing: -0.96px;
-        }
         .bubble p{
             font-size: 18px;
         }
@@ -1118,7 +1121,7 @@ a:hover .openlink{ filter:brightness(1.05); }
             padding: 36px 16px;
         }
 
-        .headline{ font-size:32px; letter-spacing:-0.96px; }
+        .headline{ font-size:25pt; letter-spacing:-0.96px; }
         .bubble p{ font-size:18px; }
 
         /* 모바일에서는 고정 아트보드 해제 */

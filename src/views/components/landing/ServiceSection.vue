@@ -470,3 +470,6 @@ const dr = new URL('@/assets/img/inx/ri_double-quetes-r.png', import.meta.url).h
 // const svc2 = new URL('@/assets/img/inx/service/img-2.png', import.meta.url).href
 // ...
 </script>
+<style scoped>
+
+</style>
